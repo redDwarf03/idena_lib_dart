@@ -187,7 +187,8 @@ class ValidationService {
         }
       }
 
-      List<ValidationSessionInfoFlips> listSessionValidationFlip = List<ValidationSessionInfoFlips>.empty(growable: true);
+      List<ValidationSessionInfoFlips> listSessionValidationFlip =
+          List<ValidationSessionInfoFlips>.empty(growable: true);
       List<ValidationSessionInfoFlips> listSessionValidationFlipExtra =
           List<ValidationSessionInfoFlips>.empty(growable: true);
       int nbFlips = 0;
@@ -586,7 +587,8 @@ class ValidationService {
       answers.nonce = 0;
       answers.answers = listAnswers;
 
-      List<ParamShortAnswer> params = List<ParamShortAnswer>.empty(growable: true);
+      List<ParamShortAnswer> params =
+          List<ParamShortAnswer>.empty(growable: true);
       params.add(answers);
       flipSubmitShortAnswersRequest.method =
           FlipSubmitShortAnswersRequest.METHOD_NAME;
@@ -667,7 +669,8 @@ class ValidationService {
       answers.nonce = 0;
       answers.answers = listAnswers;
 
-      List<ParamLongAnswer> params = List<ParamLongAnswer>.empty(growable: true);
+      List<ParamLongAnswer> params =
+          List<ParamLongAnswer>.empty(growable: true);
       params.add(answers);
       flipSubmitLongAnswersRequest.method =
           FlipSubmitLongAnswersRequest.METHOD_NAME;

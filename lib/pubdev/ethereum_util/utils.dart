@@ -6,20 +6,20 @@ import 'dart:typed_data';
 import 'package:convert/convert.dart' show hex;
 
 bool isHexPrefixed(String str) {
- ArgumentError.checkNotNull(str);
+  ArgumentError.checkNotNull(str);
 
   return str.substring(0, 2) == '0x';
 }
 
 String stripHexPrefix(String str) {
- ArgumentError.checkNotNull(str);
+  ArgumentError.checkNotNull(str);
 
   return isHexPrefixed(str) ? str.substring(2) : str;
 }
 
 /// Pads a [String] to have an even length
 String padToEven(String value) {
- ArgumentError.checkNotNull(value);
+  ArgumentError.checkNotNull(value);
 
   var a = "${value}";
 
@@ -39,14 +39,14 @@ String intToHex(int i) {
 
 /// Converts an [int] to a [Uint8List]
 Uint8List intToBuffer(int i) {
- ArgumentError.checkNotNull(i);
+  ArgumentError.checkNotNull(i);
 
   return Uint8List.fromList(hex.decode(padToEven(intToHex(i).substring(2))));
 }
 
 /// Get the binary size of a string
 int getBinarySize(String str) {
- ArgumentError.checkNotNull(str);
+  ArgumentError.checkNotNull(str);
 
   return utf8.encode(str).length;
 }
@@ -54,8 +54,8 @@ int getBinarySize(String str) {
 /// Returns TRUE if the first specified array contains all elements
 /// from the second one. FALSE otherwise.
 bool arrayContainsArray(List superset, List subset, {bool some: false}) {
- ArgumentError.checkNotNull(superset);
- ArgumentError.checkNotNull(subset);
+  ArgumentError.checkNotNull(superset);
+  ArgumentError.checkNotNull(subset);
 
   if (some) {
     return Set.from(superset).intersection(Set.from(subset)).length > 0;
@@ -66,7 +66,7 @@ bool arrayContainsArray(List superset, List subset, {bool some: false}) {
 
 /// Should be called to get utf8 from it's hex representation
 String toUtf8(String hexString) {
- ArgumentError.checkNotNull(hexString);
+  ArgumentError.checkNotNull(hexString);
 
   var bufferValue = hex.decode(
       padToEven(stripHexPrefix(hexString).replaceAll(RegExp('^0+|0+\$'), '')));
@@ -76,7 +76,7 @@ String toUtf8(String hexString) {
 
 /// Should be called to get ascii from it's hex representation
 String toAscii(String hexString) {
- ArgumentError.checkNotNull(hexString);
+  ArgumentError.checkNotNull(hexString);
 
   var start = hexString.startsWith(RegExp('^0x')) ? 2 : 0;
   return String.fromCharCodes(hex.decode(hexString.substring(start)));
@@ -84,7 +84,7 @@ String toAscii(String hexString) {
 
 /// Should be called to get hex representation (prefixed by 0x) of utf8 string
 String fromUtf8(String stringValue) {
- ArgumentError.checkNotNull(stringValue);
+  ArgumentError.checkNotNull(stringValue);
 
   var stringBuffer = utf8.encode(stringValue);
 
@@ -93,7 +93,7 @@ String fromUtf8(String stringValue) {
 
 /// Should be called to get hex representation (prefixed by 0x) of ascii string
 String fromAscii(String stringValue) {
- ArgumentError.checkNotNull(stringValue);
+  ArgumentError.checkNotNull(stringValue);
 
   var hexString = ''; // eslint-disable-line
   for (var i = 0; i < stringValue.length; i++) {
@@ -108,7 +108,7 @@ String fromAscii(String stringValue) {
 
 /// Is the string a hex string.
 bool isHexString(String value, {int length = 0}) {
- ArgumentError.checkNotNull(value);
+  ArgumentError.checkNotNull(value);
 
   if (!RegExp('^0x[0-9A-Fa-f]*\$').hasMatch(value)) {
     return false;

@@ -21,7 +21,7 @@ import 'package:idena_lib_dart/model/request/bcn_send_raw_tx_request.dart';
 import 'package:idena_lib_dart/model/request/bcn_syncing_request.dart';
 import 'package:idena_lib_dart/model/request/bcn_transaction_request.dart';
 import 'package:idena_lib_dart/model/request/bcn_transactions_request.dart';
-import 'package:idena_lib_dart/model/request/bcn_transactions_response.dart';
+import 'package:idena_lib_dart/model/response/bcn_transactions_response.dart';
 import 'package:idena_lib_dart/model/request/dna_activate_invite_request.dart';
 import 'package:idena_lib_dart/model/request/dna_becomeOffline_request.dart';
 import 'package:idena_lib_dart/model/request/dna_becomeOnline_request.dart';
@@ -207,7 +207,8 @@ class AppService {
           }
         }
 
-        List<Transaction> listTxsMempool = List<Transaction>.empty(growable: true);
+        List<Transaction> listTxsMempool =
+            List<Transaction>.empty(growable: true);
         BcnMempoolResponse bcnMempoolResponse = await getMemPool(address);
         if (bcnMempoolResponse != null && bcnMempoolResponse.result != null) {
           List<String> hashList = bcnMempoolResponse.result;
@@ -425,7 +426,8 @@ class AppService {
       dnaIdentityResponse.result.totalShortFlipPoints =
           DM_IDENTITY_TOTAL_SHORT_FLIP_POINTS;
       List<int> _listWords1 = [DM_IDENTITY_KEYWORD_1, DM_IDENTITY_KEYWORD_2];
-      dnaIdentityResponse.result.flipKeyWordPairs = List<FlipKeyWordPair>.empty(growable: true);
+      dnaIdentityResponse.result.flipKeyWordPairs =
+          List<FlipKeyWordPair>.empty(growable: true);
       dnaIdentityResponse.result.flipKeyWordPairs
           .add(new FlipKeyWordPair(id: 1, words: _listWords1, used: false));
       List<int> _listWords2 = [DM_IDENTITY_KEYWORD_3, DM_IDENTITY_KEYWORD_4];
@@ -932,8 +934,8 @@ class AppService {
           var rawTxSigned = addHexPrefix(transaction.toHex());
           //print("rawTxSigned : " + rawTxSigned);
           // Sign Raw Tx
-          
-              await sendRawTx(rawTxSigned);
+
+          await sendRawTx(rawTxSigned);
         } else {
           dnaSendTransactionRequest =
               DnaSendTransactionRequest.fromJson(mapParams);

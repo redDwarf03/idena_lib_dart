@@ -17,7 +17,7 @@ import 'package:web3dart/crypto.dart' as crypto show keccak256;
 import 'package:idena_lib_dart/factory/app_service.dart';
 import 'package:idena_lib_dart/model/deployContractAttachment.dart';
 import 'package:idena_lib_dart/model/node_type.dart';
-import 'package:idena_lib_dart/model/request/bcn_transactions_response.dart';
+import 'package:idena_lib_dart/model/response/bcn_transactions_response.dart';
 import 'package:idena_lib_dart/model/request/bcn_tx_receipt_request.dart';
 import 'package:idena_lib_dart/model/request/contract/api_contract_balance_updates_response.dart';
 import 'package:idena_lib_dart/model/request/contract/api_contract_response.dart';
@@ -942,7 +942,8 @@ class SmartContractService {
     HttpClient httpClient = new HttpClient();
     ApiContractTxsResponse apiContractTxsResponse =
         new ApiContractTxsResponse();
-    apiContractTxsResponse.result = List<ApiContractTxsResponseResult>.empty(growable: true);
+    apiContractTxsResponse.result =
+        List<ApiContractTxsResponseResult>.empty(growable: true);
     Completer<ApiContractTxsResponse> _completer =
         new Completer<ApiContractTxsResponse>();
 
