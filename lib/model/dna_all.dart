@@ -1,11 +1,11 @@
 // Project imports:
 import 'package:idena_lib_dart/model/request/bcn_transactions_request.dart';
-import 'package:idena_lib_dart/model/response/bcn_transactions_response.dart';
 import 'package:idena_lib_dart/model/request/dna_ceremonyIntervals_request.dart';
 import 'package:idena_lib_dart/model/request/dna_getBalance_request.dart';
 import 'package:idena_lib_dart/model/request/dna_getCoinbaseAddr_request.dart';
 import 'package:idena_lib_dart/model/request/dna_getEpoch_request.dart';
 import 'package:idena_lib_dart/model/request/dna_identity_request.dart';
+import 'package:idena_lib_dart/model/response/bcn_transactions_response.dart';
 import 'package:idena_lib_dart/model/response/dna_ceremonyIntervals_response.dart';
 import 'package:idena_lib_dart/model/response/dna_getBalance_response.dart';
 import 'package:idena_lib_dart/model/response/dna_getCoinbaseAddr_response.dart';
