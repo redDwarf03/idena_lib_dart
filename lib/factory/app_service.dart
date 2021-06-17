@@ -1069,7 +1069,7 @@ class AppService {
         String body = json.encode(bcnMempoolRequest.toJson());
         http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
             body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
+        if (responseHttp.statusCode == 200 && responseHttp.body != "") {
           bcnMempoolResponse = bcnMempoolResponseFromJson(responseHttp.body);
         }
       }
