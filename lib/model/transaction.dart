@@ -10,15 +10,18 @@ import 'dart:typed_data' show Uint8List;
 import 'package:convert/convert.dart' show hex;
 import 'package:hex/hex.dart' show HEX;
 import 'package:sha3/sha3.dart';
+
+// Project imports:
+import 'package:idena_lib_dart/pubdev/ethereum_util/bytes.dart';
+import 'package:idena_lib_dart/pubdev/ethereum_util/utils.dart';
+import 'package:idena_lib_dart/util/helpers.dart';
+
 import 'package:web3dart/crypto.dart' as crypto
-    show keccak256, hexToBytes, intToBytes, MsgSignature, sign;
+    show hexToBytes, intToBytes, MsgSignature, sign;
 
 // Project imports:
 import 'package:idena_lib_dart/protos/models.pb.dart'
     show ProtoTransaction, ProtoTransaction_Data;
-import 'package:idena_lib_dart/pubdev/ethereum_util/bytes.dart';
-import 'package:idena_lib_dart/pubdev/ethereum_util/utils.dart';
-import 'package:idena_lib_dart/util/helpers.dart';
 
 class Transaction {
   Transaction(nonce, epoch, type, to, amount, maxFee, tips, payload) {

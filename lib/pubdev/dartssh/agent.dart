@@ -139,7 +139,7 @@ class AGENTC_REQUEST_IDENTITIES extends AgentMessage {
 /// https://tools.ietf.org/html/draft-miller-ssh-agent-03#section-4.4
 class AGENT_IDENTITIES_ANSWER extends AgentMessage {
   static const int ID = 12;
-  List<MapEntry<Uint8List, String>> keys = List<MapEntry<Uint8List, String>>();
+  List<MapEntry<Uint8List, String>> keys = List<MapEntry<Uint8List, String>>.empty(growable: true); 
   AGENT_IDENTITIES_ANSWER() : super(ID);
 
   @override

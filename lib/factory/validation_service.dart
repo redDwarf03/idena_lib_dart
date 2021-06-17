@@ -18,6 +18,7 @@ import 'package:idena_lib_dart/enums/epoch_period.dart' as EpochPeriod;
 import 'package:idena_lib_dart/enums/relevance_type.dart' as RelevantType;
 import 'package:idena_lib_dart/model/dictWords.dart';
 import 'package:idena_lib_dart/model/flip_examples.dart';
+import 'package:idena_lib_dart/model/node_type.dart';
 import 'package:idena_lib_dart/model/request/flip_get_key_request.dart';
 import 'package:idena_lib_dart/model/request/flip_get_request.dart';
 import 'package:idena_lib_dart/model/request/flip_longHashes_request.dart';
@@ -38,16 +39,21 @@ import 'package:idena_lib_dart/pubdev/dartssh/http.dart' as ssh;
 import 'package:idena_lib_dart/util/crypto/rlp.dart';
 import 'package:idena_lib_dart/util/crypto/utils_crypto.dart';
 import 'package:idena_lib_dart/util/decrypt_flip.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:my_idena/util/util_node.dart';
-import 'package:my_idena/util/util_vps.dart';
+import 'package:idena_lib_dart/util/util_vps.dart';
 
 class ValidationService {
   var logger = Logger();
+
+  ValidationService({this.nodeType, this.apiUrl, this.keyApp});
+
+  int nodeType;
+  String apiUrl;
+  String keyApp;
+
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
   };
+
   String body;
   http.Response responseHttp;
   Map<String, dynamic> mapParams;
@@ -101,10 +107,7 @@ class ValidationService {
               FlipExamples().getMapExample(typeSession));
         }
       } else {
-        Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-        String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-        if (await NodeUtil().getNodeType() == SHARED_NODE) {
+        if (this.nodeType == SHARED_NODE) {
           mapParams = {
             'method': method,
             "params": [address],
@@ -121,17 +124,16 @@ class ValidationService {
         }
 
         if (typeSession == EpochPeriod.ShortSession) {
-          if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+          if (this.nodeType == NORMAL_VPS_NODE) {
             SSHClientStatus sshClientStatus;
-            sshClientStatus =
-                await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+            sshClientStatus = await VpsUtil().connectVps(apiUrl, keyApp);
             if (sshClientStatus.sshClientStatus) {
               sshClient = sshClientStatus.sshClient;
             }
             var response = await ssh.HttpClientImpl(
                     clientFactory: () =>
                         ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
-                .request(url.toString(),
+                .request(apiUrl,
                     method: 'POST',
                     data: jsonEncode(mapParams),
                     headers: requestHeaders);
@@ -144,8 +146,8 @@ class ValidationService {
             logger.i(new JsonEncoder.withIndent('  ')
                 .convert(flipShortHashesRequest));
             body = json.encode(flipShortHashesRequest.toJson());
-            responseHttp =
-                await http.post(url, body: body, headers: requestHeaders);
+            responseHttp = await http.post(Uri.parse(this.apiUrl),
+                body: body, headers: requestHeaders);
             if (responseHttp.statusCode == 200) {
               flipShortHashesResponse =
                   flipShortHashesResponseFromJson(responseHttp.body);
@@ -153,17 +155,16 @@ class ValidationService {
           }
         }
         if (typeSession == EpochPeriod.LongSession) {
-          if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+          if (this.nodeType == NORMAL_VPS_NODE) {
             SSHClientStatus sshClientStatus;
-            sshClientStatus =
-                await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+            sshClientStatus = await VpsUtil().connectVps(apiUrl, keyApp);
             if (sshClientStatus.sshClientStatus) {
               sshClient = sshClientStatus.sshClient;
             }
             var response = await ssh.HttpClientImpl(
                     clientFactory: () =>
                         ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
-                .request(url.toString(),
+                .request(apiUrl,
                     method: 'POST',
                     data: jsonEncode(mapParams),
                     headers: requestHeaders);
@@ -176,8 +177,8 @@ class ValidationService {
             logger.i(new JsonEncoder.withIndent('  ')
                 .convert(flipLongHashesRequest));
             body = json.encode(flipLongHashesRequest.toJson());
-            responseHttp =
-                await http.post(url, body: body, headers: requestHeaders);
+            responseHttp = await http.post(Uri.parse(this.apiUrl),
+                body: body, headers: requestHeaders);
             if (responseHttp.statusCode == 200) {
               flipLongHashesResponse =
                   flipLongHashesResponseFromJson(responseHttp.body);
@@ -186,9 +187,9 @@ class ValidationService {
         }
       }
 
-      List<ValidationSessionInfoFlips> listSessionValidationFlip = new List();
+      List<ValidationSessionInfoFlips> listSessionValidationFlip = List<ValidationSessionInfoFlips>.empty(growable: true);
       List<ValidationSessionInfoFlips> listSessionValidationFlipExtra =
-          new List();
+          List<ValidationSessionInfoFlips>.empty(growable: true);
       int nbFlips = 0;
       if (typeSession == EpochPeriod.ShortSession) {
         nbFlips = flipShortHashesResponse.result.length;
@@ -228,7 +229,7 @@ class ValidationService {
         if (validationSessionInfoFlips.extra) {
           listSessionValidationFlipExtra.add(validationSessionInfoFlips);
         } else {
-          if (await NodeUtil().getNodeType() == SHARED_NODE) {
+          if (this.nodeType == SHARED_NODE) {
             listSessionValidationFlip.add(validationSessionInfoFlips);
           } else {
             if (validationSessionInfoFlips.ready) {
@@ -306,10 +307,7 @@ class ValidationService {
               Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
         }
       } else {
-        Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-        String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-        if (await NodeUtil().getNodeType() == SHARED_NODE) {
+        if (this.nodeType == SHARED_NODE) {
           mapParams = {
             'method': FlipGetRequest.METHOD_NAME_RAW,
             'params': [validationSessionInfoFlips.hash],
@@ -319,8 +317,8 @@ class ValidationService {
 
           flipGetRequest = FlipGetRequest.fromJson(mapParams);
           body = json.encode(flipGetRequest.toJson());
-          responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             flipGetResponse = flipGetResponseFromJson(responseHttp.body);
           }
@@ -335,8 +333,8 @@ class ValidationService {
           FlipGetKeyRequest flipGetKeyRequest =
               FlipGetKeyRequest.fromJson(mapParams);
           body = json.encode(flipGetKeyRequest.toJson());
-          responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             flipGetKeyResponse = flipGetKeyResponseFromJson(responseHttp.body);
           }
@@ -362,17 +360,16 @@ class ValidationService {
             'id': 101,
             'key': keyApp
           };
-          if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+          if (this.nodeType == NORMAL_VPS_NODE) {
             SSHClientStatus sshClientStatus;
-            sshClientStatus =
-                await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+            sshClientStatus = await VpsUtil().connectVps(apiUrl, keyApp);
             if (sshClientStatus.sshClientStatus) {
               sshClient = sshClientStatus.sshClient;
             }
             var response = await ssh.HttpClientImpl(
                     clientFactory: () =>
                         ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
-                .request(url.toString(),
+                .request(apiUrl,
                     method: 'POST',
                     data: jsonEncode(mapParams),
                     headers: requestHeaders);
@@ -382,8 +379,8 @@ class ValidationService {
           } else {
             flipGetRequest = FlipGetRequest.fromJson(mapParams);
             body = json.encode(flipGetRequest.toJson());
-            responseHttp =
-                await http.post(url, body: body, headers: requestHeaders);
+            responseHttp = await http.post(Uri.parse(this.apiUrl),
+                body: body, headers: requestHeaders);
             if (responseHttp.statusCode == 200) {
               flipGetResponse = flipGetResponseFromJson(responseHttp.body);
             }
@@ -495,9 +492,6 @@ class ValidationService {
       nbWords = flipWordsResponse.result.words.length;
     } else {
       try {
-        Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-        String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
         mapParams = {
           'method': FlipWordsRequest.METHOD_NAME,
           'params': [hash],
@@ -505,17 +499,16 @@ class ValidationService {
           'key': keyApp
         };
 
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        if (this.nodeType == NORMAL_VPS_NODE) {
           SSHClientStatus sshClientStatus;
-          sshClientStatus =
-              await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          sshClientStatus = await VpsUtil().connectVps(apiUrl, keyApp);
           if (sshClientStatus.sshClientStatus) {
             sshClient = sshClientStatus.sshClient;
           }
           var response = await ssh.HttpClientImpl(
               clientFactory: () =>
                   ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-              url.toString(),
+              apiUrl,
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
@@ -527,8 +520,8 @@ class ValidationService {
           FlipWordsRequest flipWordsRequest =
               FlipWordsRequest.fromJson(mapParams);
           body = json.encode(flipWordsRequest.toJson());
-          responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             flipWordsResponse = flipWordsResponseFromJson(responseHttp.body);
             nbWords = flipWordsResponse.result.words.length;
@@ -577,11 +570,8 @@ class ValidationService {
     FlipSubmitShortAnswersResponse flipSubmitShortAnswersResponse;
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
       ParamShortAnswer answers = new ParamShortAnswer();
-      List<ShortAnswer> listAnswers = new List();
+      List<ShortAnswer> listAnswers = List<ShortAnswer>.empty(growable: true);
       for (int i = 0;
           i < validationSessionInfo.listSessionValidationFlips.length;
           i++) {
@@ -596,7 +586,7 @@ class ValidationService {
       answers.nonce = 0;
       answers.answers = listAnswers;
 
-      List<ParamShortAnswer> params = new List();
+      List<ParamShortAnswer> params = List<ParamShortAnswer>.empty(growable: true);
       params.add(answers);
       flipSubmitShortAnswersRequest.method =
           FlipSubmitShortAnswersRequest.METHOD_NAME;
@@ -604,17 +594,16 @@ class ValidationService {
       flipSubmitShortAnswersRequest.id = 101;
       flipSubmitShortAnswersRequest.key = keyApp;
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -626,8 +615,8 @@ class ValidationService {
         body = json.encode(flipSubmitShortAnswersRequest.toJson());
         logger.i(new JsonEncoder.withIndent('  ')
             .convert(flipSubmitShortAnswersRequest));
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        responseHttp = await http.post(Uri.parse(this.apiUrl),
+            body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           flipSubmitShortAnswersResponse =
               flipSubmitShortAnswersResponseFromJson(responseHttp.body);
@@ -655,11 +644,8 @@ class ValidationService {
     bool wrongWordsBool;
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
       ParamLongAnswer answers = new ParamLongAnswer();
-      List<LongAnswer> listAnswers = new List();
+      List<LongAnswer> listAnswers = List<LongAnswer>.empty(growable: true);
       for (int i = 0;
           i < validationSessionInfo.listSessionValidationFlips.length;
           i++) {
@@ -681,7 +667,7 @@ class ValidationService {
       answers.nonce = 0;
       answers.answers = listAnswers;
 
-      List<ParamLongAnswer> params = new List();
+      List<ParamLongAnswer> params = List<ParamLongAnswer>.empty(growable: true);
       params.add(answers);
       flipSubmitLongAnswersRequest.method =
           FlipSubmitLongAnswersRequest.METHOD_NAME;
@@ -689,17 +675,16 @@ class ValidationService {
       flipSubmitLongAnswersRequest.id = 101;
       flipSubmitLongAnswersRequest.key = keyApp;
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -711,8 +696,8 @@ class ValidationService {
         body = json.encode(flipSubmitLongAnswersRequest.toJson());
         logger.i(new JsonEncoder.withIndent('  ')
             .convert(flipSubmitLongAnswersRequest));
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        responseHttp = await http.post(Uri.parse(this.apiUrl),
+            body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           flipSubmitLongAnswersResponse =
               flipSubmitLongAnswersResponseFromJson(responseHttp.body);

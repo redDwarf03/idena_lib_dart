@@ -66,7 +66,7 @@ String decryptMessage(String key, String data) {
 Uint8List _kdf(secret, outputLength) {
   var ctr = 1;
   var written = 0;
-  List result = new List<int>();
+  List result = List<int>.empty(growable: true);
   while (written < outputLength) {
     var ctrs = Uint8List.fromList([ctr >> 24, ctr >> 16, ctr >> 8, ctr]);
     Uint8List hashResult = hash.sha256(ctrs + _bigIntToBytes(secret));

@@ -661,7 +661,7 @@ class MSG_USERAUTH_INFO_REQUEST extends SSHMessage {
     instruction = deserializeString(input);
     language = deserializeString(input);
     numPrompts = input.getUint32();
-    prompts = List<MapEntry<String, int>>();
+    prompts = List<MapEntry<String, int>>.empty(growable: true);
     for (int i = 0; i < numPrompts; i++) {
       prompts.add(
           MapEntry<String, int>(deserializeString(input), input.getUint8()));

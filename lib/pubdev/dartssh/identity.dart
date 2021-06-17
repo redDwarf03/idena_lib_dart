@@ -86,7 +86,7 @@ class Identity {
   }
 
   List<MapEntry<Uint8List, String>> getRawPublicKeyList() {
-    List<MapEntry<Uint8List, String>> ret = List<MapEntry<Uint8List, String>>();
+    List<MapEntry<Uint8List, String>> ret = List<MapEntry<Uint8List, String>>.empty(growable: true);
     if (ed25519 != null) {
       ret.add(MapEntry<Uint8List, String>(getEd25519PublicKey().toRaw(), ''));
     }

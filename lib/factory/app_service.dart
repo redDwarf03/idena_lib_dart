@@ -7,7 +7,6 @@ import 'dart:io';
 
 // Package imports:
 import 'package:decimal/decimal.dart';
-import 'package:event_taxi/event_taxi.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
@@ -15,12 +14,14 @@ import 'package:logger/logger.dart';
 import 'package:idena_lib_dart/deepLinks/deepLinkParamSignin.dart';
 import 'package:idena_lib_dart/deepLinks/idena_url.dart';
 import 'package:idena_lib_dart/enums/epoch_period.dart' as EpochPeriod;
+import 'package:idena_lib_dart/model/node_type.dart';
 import 'package:idena_lib_dart/model/request/bcn_fee_per_gas_request.dart';
 import 'package:idena_lib_dart/model/request/bcn_mempool_request.dart';
 import 'package:idena_lib_dart/model/request/bcn_send_raw_tx_request.dart';
 import 'package:idena_lib_dart/model/request/bcn_syncing_request.dart';
 import 'package:idena_lib_dart/model/request/bcn_transaction_request.dart';
 import 'package:idena_lib_dart/model/request/bcn_transactions_request.dart';
+import 'package:idena_lib_dart/model/request/bcn_transactions_response.dart';
 import 'package:idena_lib_dart/model/request/dna_activate_invite_request.dart';
 import 'package:idena_lib_dart/model/request/dna_becomeOffline_request.dart';
 import 'package:idena_lib_dart/model/request/dna_becomeOnline_request.dart';
@@ -38,7 +39,6 @@ import 'package:idena_lib_dart/model/response/bcn_mempool_response.dart';
 import 'package:idena_lib_dart/model/response/bcn_send_raw_tx_response.dart';
 import 'package:idena_lib_dart/model/response/bcn_syncing_response.dart';
 import 'package:idena_lib_dart/model/response/bcn_transaction_response.dart';
-import 'package:idena_lib_dart/model/response/bcn_transactions_response.dart';
 import 'package:idena_lib_dart/model/response/dna_activate_invite_response.dart';
 import 'package:idena_lib_dart/model/response/dna_becomeOffline_response.dart';
 import 'package:idena_lib_dart/model/response/dna_becomeOnline_response.dart';
@@ -50,60 +50,25 @@ import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
 import 'package:idena_lib_dart/model/response/dna_sendTransaction_response.dart';
 import 'package:idena_lib_dart/model/response/dna_send_invite_response.dart';
 import 'package:idena_lib_dart/model/response/dna_signin_response.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_aed.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_ars.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_aud.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_brl.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_btc.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_cad.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_chf.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_clp.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_cny.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_czk.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_dkk.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_eur.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_gbp.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_hkd.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_huf.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_idr.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_ils.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_inr.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_jpy.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_krw.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_kwd.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_mxn.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_myr.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_nok.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_nzd.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_php.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_pkr.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_pln.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_rub.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_sar.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_sek.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_sgd.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_thb.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_try.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_twd.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_usd.dart';
-import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response_zar.dart';
 import 'package:idena_lib_dart/model/transaction.dart' as model;
 import 'package:idena_lib_dart/pubdev/dartssh/client.dart';
 import 'package:idena_lib_dart/pubdev/dartssh/http.dart' as ssh;
 import 'package:idena_lib_dart/pubdev/ethereum_util/bytes.dart';
 import 'package:idena_lib_dart/util/helpers.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:my_idena/util/util_demo_mode.dart';
-import 'package:my_idena/util/util_node.dart';
-import 'package:my_idena/util/util_vps.dart';
+import 'package:idena_lib_dart/util/util_demo_mode.dart';
+import 'package:idena_lib_dart/util/util_vps.dart';
 
 class AppService {
   var logger = Logger();
   final Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
   };
+
+  AppService({this.nodeType, this.apiUrl, this.keyApp});
+
+  int nodeType;
+  String apiUrl;
+  String keyApp;
 
   SSHClient sshClient;
 
@@ -115,52 +80,38 @@ class AppService {
     Completer<DnaGetBalanceResponse> _completer =
         new Completer<DnaGetBalanceResponse>();
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE) {
+    if (this.nodeType == DEMO_NODE) {
       dnaGetBalanceResponse = new DnaGetBalanceResponse();
       dnaGetBalanceResponse.result = new DnaGetBalanceResponseResult();
       dnaGetBalanceResponse.result.balance = DM_PORTOFOLIO_MAIN;
       dnaGetBalanceResponse.result.stake = DM_PORTOFOLIO_STAKE;
     } else {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
-        if (url.isAbsolute == false) {
-          _completer.complete(dnaGetBalanceResponse);
-          return _completer.future;
-        }
-
+      if (this.nodeType == PUBLIC_NODE) {
         mapParams = {
           'method': DnaGetBalanceRequest.METHOD_NAME,
           'params': [address],
           'id': 101,
         };
       } else {
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(dnaGetBalanceResponse);
-          return _completer.future;
-        }
-
         mapParams = {
           'method': DnaGetBalanceRequest.METHOD_NAME,
           'params': [address],
           'id': 101,
-          'key': keyApp
+          'key': this.keyApp
         };
       }
 
       try {
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        if (this.nodeType == NORMAL_VPS_NODE) {
           SSHClientStatus sshClientStatus;
-          sshClientStatus =
-              await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
           if (sshClientStatus.sshClientStatus) {
             sshClient = sshClientStatus.sshClient;
           }
           var response = await ssh.HttpClientImpl(
               clientFactory: () =>
                   ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-              url.toString(),
+              this.apiUrl,
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
@@ -171,8 +122,8 @@ class AppService {
         } else {
           dnaGetBalanceRequest = DnaGetBalanceRequest.fromJson(mapParams);
           String body = json.encode(dnaGetBalanceRequest.toJson());
-          http.Response responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaGetBalanceResponse =
                 dnaGetBalanceResponseFromJson(responseHttp.body);
@@ -214,15 +165,7 @@ class AppService {
     BcnTransactionsRequest bcnTransactionsRequest;
     BcnTransactionsResponse bcnTransactionsResponse;
 
-    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-    if (url.isAbsolute == false || keyApp == "") {
-      _completer.complete(bcnTransactionsResponse);
-      return _completer.future;
-    }
-
-    if (await NodeUtil().getNodeType() == DEMO_NODE) {
+    if (this.nodeType == DEMO_NODE) {
       bcnTransactionsResponse = new BcnTransactionsResponse();
       bcnTransactionsResponse.result = new BcnTransactionsResponseResult();
     } else {
@@ -232,21 +175,20 @@ class AppService {
           {"address": address, "count": count}
         ],
         'id': 101,
-        'key': keyApp
+        'key': this.keyApp
       };
 
       try {
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        if (this.nodeType == NORMAL_VPS_NODE) {
           SSHClientStatus sshClientStatus;
-          sshClientStatus =
-              await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
           if (sshClientStatus.sshClientStatus) {
             sshClient = sshClientStatus.sshClient;
           }
           var response = await ssh.HttpClientImpl(
               clientFactory: () =>
                   ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-              url.toString(),
+              this.apiUrl,
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
@@ -257,15 +199,15 @@ class AppService {
         } else {
           bcnTransactionsRequest = BcnTransactionsRequest.fromJson(mapParams);
           String body = json.encode(bcnTransactionsRequest.toJson());
-          http.Response responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             bcnTransactionsResponse =
                 bcnTransactionsResponseFromJson(responseHttp.body);
           }
         }
 
-        List<Transaction> listTxsMempool = new List<Transaction>();
+        List<Transaction> listTxsMempool = List<Transaction>.empty(growable: true);
         BcnMempoolResponse bcnMempoolResponse = await getMemPool(address);
         if (bcnMempoolResponse != null && bcnMempoolResponse.result != null) {
           List<String> hashList = bcnMempoolResponse.result;
@@ -314,275 +256,14 @@ class AppService {
     return _completer.future;
   }
 
-  Future<SimplePriceResponse> getSimplePrice(String currency) async {
-    SimplePriceResponse simplePriceResponse = new SimplePriceResponse();
-    simplePriceResponse.currency = currency;
-
-    HttpClient httpClient = new HttpClient();
-    try {
-      HttpClientRequest request = await httpClient.getUrl(Uri.parse(
-          "https://api.coingecko.com/api/v3/simple/price?ids=idena&vs_currencies=BTC"));
-      request.headers.set('content-type', 'application/json');
-      HttpClientResponse response = await request.close();
-      if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
-        SimplePriceBtcResponse simplePriceBtcResponse =
-            simplePriceBtcResponseFromJson(reply);
-        simplePriceResponse.btcPrice = simplePriceBtcResponse.idena.btc;
-      }
-
-      request = await httpClient.getUrl(Uri.parse(
-          "https://api.coingecko.com/api/v3/simple/price?ids=idena&vs_currencies=" +
-              currency));
-      request.headers.set('content-type', 'application/json');
-      response = await request.close();
-      if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
-        switch (currency.toUpperCase()) {
-          case "ARS":
-            SimplePriceArsResponse simplePriceLocalResponse =
-                simplePriceArsResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.ars;
-            break;
-          case "AUD":
-            SimplePriceAudResponse simplePriceLocalResponse =
-                simplePriceAudResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.aud;
-            break;
-          case "BRL":
-            SimplePriceBrlResponse simplePriceLocalResponse =
-                simplePriceBrlResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.brl;
-            break;
-          case "CAD":
-            SimplePriceCadResponse simplePriceLocalResponse =
-                simplePriceCadResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.cad;
-            break;
-          case "CHF":
-            SimplePriceChfResponse simplePriceLocalResponse =
-                simplePriceChfResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.chf;
-            break;
-          case "CLP":
-            SimplePriceClpResponse simplePriceLocalResponse =
-                simplePriceClpResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.clp;
-            break;
-          case "CNY":
-            SimplePriceCnyResponse simplePriceLocalResponse =
-                simplePriceCnyResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.cny;
-            break;
-          case "CZK":
-            SimplePriceCzkResponse simplePriceLocalResponse =
-                simplePriceCzkResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.czk;
-            break;
-          case "DKK":
-            SimplePriceDkkResponse simplePriceLocalResponse =
-                simplePriceDkkResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.dkk;
-            break;
-          case "EUR":
-            SimplePriceEurResponse simplePriceLocalResponse =
-                simplePriceEurResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.eur;
-            break;
-          case "GBP":
-            SimplePriceGbpResponse simplePriceLocalResponse =
-                simplePriceGbpResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.gbp;
-            break;
-          case "HKD":
-            SimplePriceHkdResponse simplePriceLocalResponse =
-                simplePriceHkdResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.hkd;
-            break;
-          case "HUF":
-            SimplePriceHufResponse simplePriceLocalResponse =
-                simplePriceHufResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.huf;
-            break;
-          case "IDR":
-            SimplePriceIdrResponse simplePriceLocalResponse =
-                simplePriceIdrResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.idr;
-            break;
-          case "ILS":
-            SimplePriceIlsResponse simplePriceLocalResponse =
-                simplePriceIlsResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.ils;
-            break;
-          case "INR":
-            SimplePriceInrResponse simplePriceLocalResponse =
-                simplePriceInrResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.inr;
-            break;
-          case "JPY":
-            SimplePriceJpyResponse simplePriceLocalResponse =
-                simplePriceJpyResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.jpy;
-            break;
-          case "KRW":
-            SimplePriceKrwResponse simplePriceLocalResponse =
-                simplePriceKrwResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.krw;
-            break;
-          case "KWD":
-            SimplePriceKwdResponse simplePriceLocalResponse =
-                simplePriceKwdResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.kwd;
-            break;
-          case "MXN":
-            SimplePriceMxnResponse simplePriceLocalResponse =
-                simplePriceMxnResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.mxn;
-            break;
-          case "MYR":
-            SimplePriceMyrResponse simplePriceLocalResponse =
-                simplePriceMyrResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.myr;
-            break;
-          case "NOK":
-            SimplePriceNokResponse simplePriceLocalResponse =
-                simplePriceNokResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.nok;
-            break;
-          case "NZD":
-            SimplePriceNzdResponse simplePriceLocalResponse =
-                simplePriceNzdResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.nzd;
-            break;
-          case "PHP":
-            SimplePricePhpResponse simplePriceLocalResponse =
-                simplePricePhpResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.php;
-            break;
-          case "PKR":
-            SimplePricePkrResponse simplePriceLocalResponse =
-                simplePricePkrResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.pkr;
-            break;
-          case "PLN":
-            SimplePricePlnResponse simplePriceLocalResponse =
-                simplePricePlnResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.pln;
-            break;
-          case "RUB":
-            SimplePriceRubResponse simplePriceLocalResponse =
-                simplePriceRubResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.rub;
-            break;
-          case "SAR":
-            SimplePriceSarResponse simplePriceLocalResponse =
-                simplePriceSarResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.sar;
-            break;
-          case "SEK":
-            SimplePriceSekResponse simplePriceLocalResponse =
-                simplePriceSekResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.sek;
-            break;
-          case "SGD":
-            SimplePriceSgdResponse simplePriceLocalResponse =
-                simplePriceSgdResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.sgd;
-            break;
-          case "THB":
-            SimplePriceThbResponse simplePriceLocalResponse =
-                simplePriceThbResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.thb;
-            break;
-          case "TRY":
-            SimplePriceTryResponse simplePriceLocalResponse =
-                simplePriceTryResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.tryl;
-            break;
-          case "TWD":
-            SimplePriceTwdResponse simplePriceLocalResponse =
-                simplePriceTwdResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.twd;
-            break;
-          case "AED":
-            SimplePriceAedResponse simplePriceLocalResponse =
-                simplePriceAedResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.aed;
-            break;
-          case "ZAR":
-            SimplePriceZarResponse simplePriceLocalResponse =
-                simplePriceZarResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.zar;
-            break;
-          case "USD":
-          default:
-            SimplePriceUsdResponse simplePriceLocalResponse =
-                simplePriceUsdResponseFromJson(reply);
-            simplePriceResponse.localCurrencyPrice =
-                simplePriceLocalResponse.idena.usd;
-            break;
-        }
-      }
-    } catch (e) {} finally {
-      httpClient.close();
-    }
-    return simplePriceResponse;
-  }
-
   Future<String> getWStatusGetResponse() async {
     DnaIdentityRequest dnaIdentityRequest;
 
     Map<String, dynamic> mapParams;
     Completer<String> _completer = new Completer<String>();
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE) {
+    if (this.nodeType == DEMO_NODE) {
       _completer.complete("true");
-      return _completer.future;
-    }
-
-    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-    if (url == null ||
-        keyApp == null ||
-        url.isAbsolute == false ||
-        keyApp == "") {
-      _completer.complete("Url and/or api key invalid");
       return _completer.future;
     }
 
@@ -590,14 +271,13 @@ class AppService {
       'method': DnaIdentityRequest.METHOD_NAME,
       'params': [],
       'id': 101,
-      'key': keyApp
+      'key': this.keyApp
     };
 
     try {
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         } else {
@@ -608,7 +288,7 @@ class AppService {
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            this.apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -629,7 +309,7 @@ class AppService {
         dnaIdentityRequest = DnaIdentityRequest.fromJson(mapParams);
         String body = json.encode(dnaIdentityRequest.toJson());
         http.Response responseHttp = await http
-            .post(url, body: body, headers: requestHeaders)
+            .post(Uri.parse(this.apiUrl), body: body, headers: requestHeaders)
             .timeout(Duration(seconds: 2));
         if (responseHttp.statusCode == 200) {
           DnaIdentityResponse dnaIdentityResponse =
@@ -652,7 +332,8 @@ class AppService {
     return _completer.future;
   }
 
-  Future<DnaGetCoinbaseAddrResponse> getDnaGetCoinbaseAddr() async {
+  Future<DnaGetCoinbaseAddrResponse> getDnaGetCoinbaseAddr(
+      String addressByDefault) async {
     DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
     DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse;
     Map<String, dynamic> mapParams;
@@ -660,36 +341,27 @@ class AppService {
     Completer<DnaGetCoinbaseAddrResponse> _completer =
         new Completer<DnaGetCoinbaseAddrResponse>();
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE) {
+    if (this.nodeType == DEMO_NODE) {
       dnaGetCoinbaseAddrResponse.result = DM_IDENTITY_ADDRESS;
     } else {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(dnaGetCoinbaseAddrResponse);
-        return _completer.future;
-      }
-
       mapParams = {
         'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
         'params': [],
         'id': 101,
-        'key': keyApp
+        'key': this.keyApp
       };
 
       try {
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        if (this.nodeType == NORMAL_VPS_NODE) {
           SSHClientStatus sshClientStatus;
-          sshClientStatus =
-              await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
           if (sshClientStatus.sshClientStatus) {
             sshClient = sshClientStatus.sshClient;
           }
           var response = await ssh.HttpClientImpl(
               clientFactory: () =>
                   ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-              url.toString(),
+              this.apiUrl,
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
@@ -701,8 +373,8 @@ class AppService {
           dnaGetCoinbaseAddrRequest =
               DnaGetCoinbaseAddrRequest.fromJson(mapParams);
           String body = json.encode(dnaGetCoinbaseAddrRequest.toJson());
-          http.Response responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaGetCoinbaseAddrResponse =
                 dnaGetCoinbaseAddrResponseFromJson(responseHttp.body);
@@ -711,8 +383,7 @@ class AppService {
       } catch (e) {
         logger.e(e.toString());
         dnaGetCoinbaseAddrResponse = new DnaGetCoinbaseAddrResponse();
-        dnaGetCoinbaseAddrResponse.result =
-            await sl.get<SharedPrefsUtil>().getAddress();
+        dnaGetCoinbaseAddrResponse.result = addressByDefault;
       }
     }
     _completer.complete(dnaGetCoinbaseAddrResponse);
@@ -735,7 +406,7 @@ class AppService {
       return _completer.future;
     }
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE) {
+    if (this.nodeType == DEMO_NODE) {
       dnaIdentityResponse = new DnaIdentityResponse();
       dnaIdentityResponse.result = DnaIdentityResponseResult();
       dnaIdentityResponse.result.address = DM_IDENTITY_ADDRESS;
@@ -754,53 +425,39 @@ class AppService {
       dnaIdentityResponse.result.totalShortFlipPoints =
           DM_IDENTITY_TOTAL_SHORT_FLIP_POINTS;
       List<int> _listWords1 = [DM_IDENTITY_KEYWORD_1, DM_IDENTITY_KEYWORD_2];
-      dnaIdentityResponse.result.flipKeyWordPairs = new List<FlipKeyWordPair>();
+      dnaIdentityResponse.result.flipKeyWordPairs = List<FlipKeyWordPair>.empty(growable: true);
       dnaIdentityResponse.result.flipKeyWordPairs
           .add(new FlipKeyWordPair(id: 1, words: _listWords1, used: false));
       List<int> _listWords2 = [DM_IDENTITY_KEYWORD_3, DM_IDENTITY_KEYWORD_4];
       dnaIdentityResponse.result.flipKeyWordPairs
           .add(new FlipKeyWordPair(id: 1, words: _listWords2, used: false));
     } else {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
-        if (url.isAbsolute == false) {
-          _completer.complete(dnaIdentityResponse);
-          return _completer.future;
-        }
-
+      if (this.nodeType == PUBLIC_NODE) {
         mapParams = {
           'method': DnaIdentityRequest.METHOD_NAME,
           'params': [address],
           'id': 101,
         };
       } else {
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(dnaIdentityResponse);
-          return _completer.future;
-        }
-
         mapParams = {
           'method': DnaIdentityRequest.METHOD_NAME,
           'params': [address],
           'id': 101,
-          'key': keyApp
+          'key': this.keyApp
         };
       }
 
       try {
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        if (this.nodeType == NORMAL_VPS_NODE) {
           SSHClientStatus sshClientStatus;
-          sshClientStatus =
-              await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
           if (sshClientStatus.sshClientStatus) {
             sshClient = sshClientStatus.sshClient;
           }
           var response = await ssh.HttpClientImpl(
               clientFactory: () =>
                   ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-              url.toString(),
+              this.apiUrl,
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
@@ -810,8 +467,8 @@ class AppService {
         } else {
           dnaIdentityRequest = DnaIdentityRequest.fromJson(mapParams);
           String body = json.encode(dnaIdentityRequest.toJson());
-          http.Response responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaIdentityResponse =
                 dnaIdentityResponseFromJson(responseHttp.body);
@@ -838,53 +495,39 @@ class AppService {
     Completer<DnaGetEpochResponse> _completer =
         new Completer<DnaGetEpochResponse>();
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE) {
+    if (this.nodeType == DEMO_NODE) {
       dnaGetEpochResponse = new DnaGetEpochResponse();
       dnaGetEpochResponse.result = new DnaGetEpochResponseResult();
       dnaGetEpochResponse.result.currentPeriod = DM_EPOCH_CURRENT_PERIOD;
       dnaGetEpochResponse.result.epoch = DM_EPOCH_EPOCH;
       dnaGetEpochResponse.result.nextValidation = DM_EPOCH_NEXT_VALIDATION;
     } else {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
-        if (url.isAbsolute == false) {
-          _completer.complete(dnaGetEpochResponse);
-          return _completer.future;
-        }
-
+      if (this.nodeType == PUBLIC_NODE) {
         mapParams = {
           'method': DnaGetEpochRequest.METHOD_NAME,
           'params': [],
           'id': 101,
         };
       } else {
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(dnaGetEpochResponse);
-          return _completer.future;
-        }
-
         mapParams = {
           'method': DnaGetEpochRequest.METHOD_NAME,
           'params': [],
           'id': 101,
-          'key': keyApp
+          'key': this.keyApp
         };
       }
 
       try {
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        if (this.nodeType == NORMAL_VPS_NODE) {
           SSHClientStatus sshClientStatus;
-          sshClientStatus =
-              await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
           if (sshClientStatus.sshClientStatus) {
             sshClient = sshClientStatus.sshClient;
           }
           var response = await ssh.HttpClientImpl(
               clientFactory: () =>
                   ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-              url.toString(),
+              this.apiUrl,
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
@@ -894,8 +537,8 @@ class AppService {
         } else {
           dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
           String body = json.encode(dnaGetEpochRequest.toJson());
-          http.Response responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaGetEpochResponse =
                 dnaGetEpochResponseFromJson(responseHttp.body);
@@ -907,7 +550,6 @@ class AppService {
     }
 
     _completer.complete(dnaGetEpochResponse);
-
     return _completer.future;
   }
 
@@ -920,8 +562,7 @@ class AppService {
     Completer<DnaCeremonyIntervalsResponse> _completer =
         new Completer<DnaCeremonyIntervalsResponse>();
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE ||
-        await NodeUtil().getNodeType() == PUBLIC_NODE) {
+    if (this.nodeType == DEMO_NODE || this.nodeType == PUBLIC_NODE) {
       dnaCeremonyIntervalsResponse = new DnaCeremonyIntervalsResponse();
       dnaCeremonyIntervalsResponse.result =
           new DnaCeremonyIntervalsResponseResult();
@@ -932,51 +573,32 @@ class AppService {
       dnaCeremonyIntervalsResponse.result.shortSessionDuration =
           DM_CEREMONY_INTERVALS_SHORT_SESSION_DURATION;
     } else {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
-        if (url.isAbsolute == false) {
-          _completer.complete(dnaCeremonyIntervalsResponse);
-          return _completer.future;
-        }
-
+      if (this.nodeType == PUBLIC_NODE) {
         mapParams = {
           'method': DnaCeremonyIntervalsRequest.METHOD_NAME,
           'params': [],
           'id': 101,
         };
       } else {
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(dnaCeremonyIntervalsResponse);
-          return _completer.future;
-        }
-
         mapParams = {
           'method': DnaCeremonyIntervalsRequest.METHOD_NAME,
           'params': [],
           'id': 101,
-          'key': keyApp
+          'key': this.keyApp
         };
       }
 
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(dnaCeremonyIntervalsResponse);
-        return _completer.future;
-      }
-
       try {
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        if (this.nodeType == NORMAL_VPS_NODE) {
           SSHClientStatus sshClientStatus;
-          sshClientStatus =
-              await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
           if (sshClientStatus.sshClientStatus) {
             sshClient = sshClientStatus.sshClient;
           }
           var response = await ssh.HttpClientImpl(
               clientFactory: () =>
                   ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-              url.toString(),
+              this.apiUrl,
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
@@ -998,8 +620,8 @@ class AppService {
           dnaCeremonyIntervalsRequest =
               DnaCeremonyIntervalsRequest.fromJson(mapParams);
           String body = json.encode(dnaCeremonyIntervalsRequest.toJson());
-          http.Response responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaCeremonyIntervalsResponse =
                 dnaCeremonyIntervalsResponseFromJson(responseHttp.body);
@@ -1034,35 +656,26 @@ class AppService {
     try {
       DnaGetEpochRequest dnaGetEpochRequest;
       DnaGetEpochResponse dnaGetEpochResponse;
-      if (await NodeUtil().getNodeType() == DEMO_NODE) {
+      if (this.nodeType == DEMO_NODE) {
         currentPeriod = DM_EPOCH_CURRENT_PERIOD;
       } else {
-        Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-        String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(currentPeriod);
-          return _completer.future;
-        }
-
         mapParams = {
           'method': DnaGetEpochRequest.METHOD_NAME,
           'params': [],
           'id': 101,
-          'key': keyApp
+          'key': this.keyApp
         };
 
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        if (this.nodeType == NORMAL_VPS_NODE) {
           SSHClientStatus sshClientStatus;
-          sshClientStatus =
-              await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
           if (sshClientStatus.sshClientStatus) {
             sshClient = sshClientStatus.sshClient;
           }
           var response = await ssh.HttpClientImpl(
               clientFactory: () =>
                   ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-              url.toString(),
+              this.apiUrl,
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
@@ -1077,8 +690,8 @@ class AppService {
         } else {
           dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
           String body = json.encode(dnaGetEpochRequest.toJson());
-          http.Response responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaGetEpochResponse =
                 dnaGetEpochResponseFromJson(responseHttp.body);
@@ -1096,7 +709,6 @@ class AppService {
     }
 
     _completer.complete(currentPeriod);
-
     return _completer.future;
   }
 
@@ -1110,34 +722,25 @@ class AppService {
         new Completer<DnaBecomeOnlineResponse>();
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(dnaBecomeOnlineResponse);
-        return _completer.future;
-      }
-
       mapParams = {
         'method': DnaBecomeOnlineRequest.METHOD_NAME,
         "params": [
           {"nonce": null, "epoch": null}
         ],
         'id': 101,
-        'key': keyApp
+        'key': this.keyApp
       };
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            this.apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -1148,8 +751,8 @@ class AppService {
       } else {
         dnaBecomeOnlineRequest = DnaBecomeOnlineRequest.fromJson(mapParams);
         String body = json.encode(dnaBecomeOnlineRequest.toJson());
-        http.Response responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+            body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaBecomeOnlineResponse =
               dnaBecomeOnlineResponseFromJson(responseHttp.body);
@@ -1173,34 +776,25 @@ class AppService {
         new Completer<DnaBecomeOfflineResponse>();
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(dnaBecomeOffLineResponse);
-        return _completer.future;
-      }
-
       mapParams = {
         'method': DnaBecomeOfflineRequest.METHOD_NAME,
         "params": [
           {"nonce": null, "epoch": null}
         ],
         'id': 101,
-        'key': keyApp
+        'key': this.keyApp
       };
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            this.apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -1211,8 +805,8 @@ class AppService {
       } else {
         dnaBecomeOffLineRequest = DnaBecomeOfflineRequest.fromJson(mapParams);
         String body = json.encode(dnaBecomeOffLineRequest.toJson());
-        http.Response responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+            body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaBecomeOffLineResponse =
               dnaBecomeOfflineResponseFromJson(responseHttp.body);
@@ -1250,15 +844,7 @@ class AppService {
         new Completer<DnaSendTransactionResponse>();
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
-        if (url.isAbsolute == false) {
-          _completer.complete(dnaSendTransactionResponse);
-          return _completer.future;
-        }
-
+      if (this.nodeType == PUBLIC_NODE) {
         if (payload != null && payload.trim().isEmpty == false) {
           String payloadHex = AppHelpers.toHexString(toBuffer(payload), true);
           mapParams = {
@@ -1278,11 +864,6 @@ class AppService {
           };
         }
       } else {
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(dnaSendTransactionResponse);
-          return _completer.future;
-        }
-
         if (payload != null && payload.trim().isEmpty == false) {
           String payloadHex = AppHelpers.toHexString(toBuffer(payload), true);
           mapParams = {
@@ -1291,7 +872,7 @@ class AppService {
               {"from": from, "to": to, 'amount': amount, 'payload': payloadHex}
             ],
             'id': 101,
-            'key': keyApp
+            'key': this.keyApp
           };
         } else {
           mapParams = {
@@ -1300,22 +881,21 @@ class AppService {
               {"from": from, "to": to, 'amount': amount}
             ],
             'id': 101,
-            'key': keyApp
+            'key': this.keyApp
           };
         }
       }
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            this.apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -1329,8 +909,7 @@ class AppService {
           dnaSendTransactionResponse.error.message = response.text;
         }
       } else {
-        if (await NodeUtil().getNodeType() == SHARED_NODE ||
-            await NodeUtil().getNodeType() == PUBLIC_NODE) {
+        if (this.nodeType == SHARED_NODE || this.nodeType == PUBLIC_NODE) {
           int nonce = await getLastNonce(from);
           DnaGetEpochResponse dnaGetEpochResponse = await getDnaGetEpoch();
           int epoch = 0;
@@ -1353,14 +932,14 @@ class AppService {
           var rawTxSigned = addHexPrefix(transaction.toHex());
           //print("rawTxSigned : " + rawTxSigned);
           // Sign Raw Tx
-          BcnSendRawTxResponse bcnSendRawTxResponse =
+          
               await sendRawTx(rawTxSigned);
         } else {
           dnaSendTransactionRequest =
               DnaSendTransactionRequest.fromJson(mapParams);
           String body = json.encode(dnaSendTransactionRequest.toJson());
-          http.Response responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaSendTransactionResponse =
                 dnaSendTransactionResponseFromJson(responseHttp.body);
@@ -1390,53 +969,38 @@ class AppService {
         new Completer<BcnSyncingResponse>();
 
     try {
-      if (await NodeUtil().getNodeType() == DEMO_NODE ||
-          await NodeUtil().getNodeType() == SHARED_NODE) {
+      if (this.nodeType == DEMO_NODE || this.nodeType == SHARED_NODE) {
         bcnSyncingResponse = new BcnSyncingResponse();
         bcnSyncingResponse.result = new BcnSyncingResponseResult();
         bcnSyncingResponse.result.syncing = DM_SYNC_SYNCING;
         bcnSyncingResponse.result.currentBlock = DM_SYNC_CURRENT_BLOCK;
         bcnSyncingResponse.result.highestBlock = DM_SYNC_HIGHEST_BLOCK;
       } else {
-        Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-        String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-        if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
-          if (url.isAbsolute == false) {
-            _completer.complete(bcnSyncingResponse);
-            return _completer.future;
-          }
-
+        if (this.nodeType == PUBLIC_NODE) {
           mapParams = {
             'method': BcnSyncingRequest.METHOD_NAME,
             'params': [],
             'id': 101,
           };
         } else {
-          if (url.isAbsolute == false || keyApp == "") {
-            _completer.complete(bcnSyncingResponse);
-            return _completer.future;
-          }
-
           mapParams = {
             'method': BcnSyncingRequest.METHOD_NAME,
             'params': [],
             'id': 101,
-            'key': keyApp
+            'key': this.keyApp
           };
         }
 
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        if (this.nodeType == NORMAL_VPS_NODE) {
           SSHClientStatus sshClientStatus;
-          sshClientStatus =
-              await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
           if (sshClientStatus.sshClientStatus) {
             sshClient = sshClientStatus.sshClient;
           }
           var response = await ssh.HttpClientImpl(
               clientFactory: () =>
                   ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-              url.toString(),
+              this.apiUrl,
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
@@ -1446,8 +1010,8 @@ class AppService {
         } else {
           bcnSyncingRequest = BcnSyncingRequest.fromJson(mapParams);
           String body = json.encode(bcnSyncingRequest.toJson());
-          http.Response responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             bcnSyncingResponse = bcnSyncingResponseFromJson(responseHttp.body);
           }
@@ -1475,32 +1039,23 @@ class AppService {
         new Completer<BcnMempoolResponse>();
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(bcnMempoolResponse);
-        return _completer.future;
-      }
-
       mapParams = {
         'method': BcnMempoolRequest.METHOD_NAME,
         "params": [address],
         'id': 101,
-        'key': keyApp
+        'key': this.keyApp
       };
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            this.apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -1510,8 +1065,8 @@ class AppService {
       } else {
         bcnMempoolRequest = BcnMempoolRequest.fromJson(mapParams);
         String body = json.encode(bcnMempoolRequest.toJson());
-        http.Response responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+            body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           bcnMempoolResponse = bcnMempoolResponseFromJson(responseHttp.body);
         }
@@ -1535,45 +1090,31 @@ class AppService {
         new Completer<BcnTransactionResponse>();
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
-        if (url.isAbsolute == false) {
-          _completer.complete(bcnTransactionResponse);
-          return _completer.future;
-        }
-
+      if (this.nodeType == PUBLIC_NODE) {
         mapParams = {
           'method': BcnTransactionRequest.METHOD_NAME,
           "params": [hash],
           'id': 101,
         };
       } else {
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(bcnTransactionResponse);
-          return _completer.future;
-        }
-
         mapParams = {
           'method': BcnTransactionRequest.METHOD_NAME,
           "params": [hash],
           'id': 101,
-          'key': keyApp
+          'key': this.keyApp
         };
       }
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            this.apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -1589,8 +1130,8 @@ class AppService {
       } else {
         bcnTransactionRequest = BcnTransactionRequest.fromJson(mapParams);
         String body = json.encode(bcnTransactionRequest.toJson());
-        http.Response responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+            body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           bcnTransactionResponse =
               bcnTransactionResponseFromJson(responseHttp.body);
@@ -1619,15 +1160,7 @@ class AppService {
         new Completer<BcnSendRawTxResponse>();
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
-        if (url.isAbsolute == false) {
-          _completer.complete(bcnSendRawTxResponse);
-          return _completer.future;
-        }
-
+      if (this.nodeType == PUBLIC_NODE) {
         //print("transaction.toHex : " + rawTxSigned);
         mapParams = {
           'method': BcnSendRawTxRequest.METHOD_NAME,
@@ -1635,31 +1168,25 @@ class AppService {
           'id': 101
         };
       } else {
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(bcnSendRawTxResponse);
-          return _completer.future;
-        }
-
         //print("transaction.toHex : " + rawTxSigned);
         mapParams = {
           'method': BcnSendRawTxRequest.METHOD_NAME,
           "params": [rawTxSigned],
           'id': 101,
-          'key': keyApp
+          'key': this.keyApp
         };
       }
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            this.apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -1673,8 +1200,8 @@ class AppService {
       } else {
         bcnSendRawTxRequest = BcnSendRawTxRequest.fromJson(mapParams);
         String body = json.encode(bcnSendRawTxRequest.toJson());
-        http.Response responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+            body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           bcnSendRawTxResponse =
               bcnSendRawTxResponseFromJson(responseHttp.body);
@@ -1703,34 +1230,25 @@ class AppService {
         new Completer<DnaActivateInviteResponse>();
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(dnaActivateInviteResponse);
-        return _completer.future;
-      }
-
       mapParams = {
         'method': DnaActivateInviteRequest.METHOD_NAME,
         "params": [
           {"key": key, "to": address}
         ],
         'id': 101,
-        'key': keyApp
+        'key': this.keyApp
       };
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            this.apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -1741,8 +1259,8 @@ class AppService {
       } else {
         dnaActivateInviteRequest = DnaActivateInviteRequest.fromJson(mapParams);
         String body = json.encode(dnaActivateInviteRequest.toJson());
-        http.Response responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+            body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaActivateInviteResponse =
               dnaActivateInviteResponseFromJson(responseHttp.body);
@@ -1767,34 +1285,25 @@ class AppService {
         new Completer<DnaSendInviteResponse>();
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(dnaSendInviteResponse);
-        return _completer.future;
-      }
-
       mapParams = {
         'method': DnaSendInviteRequest.METHOD_NAME,
         'params': [
           {'to': address, 'amount': amount, 'nonce': nonce, 'epoch': epoch}
         ],
         'id': 101,
-        'key': keyApp
+        'key': this.keyApp
       };
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            this.apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -1804,8 +1313,8 @@ class AppService {
       } else {
         dnaSendInviteRequest = DnaSendInviteRequest.fromJson(mapParams);
         String body = json.encode(dnaSendInviteRequest.toJson());
-        http.Response responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+            body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaSendInviteResponse =
               dnaSendInviteResponseFromJson(responseHttp.body);
@@ -1830,40 +1339,30 @@ class AppService {
     Map<String, dynamic> mapParams;
 
     try {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-      if (await NodeUtil().getNodeType() == PUBLIC_NODE ||
-          await NodeUtil().getNodeType() == SHARED_NODE) {
+      if (this.nodeType == PUBLIC_NODE || this.nodeType == SHARED_NODE) {
         deepLinkParam.signature = AppHelpers.toHexString(
             IdenaUrl().getNonceInternal(deepLinkParam.nonce, privateKey), true);
         _completer.complete(deepLinkParam);
         return _completer.future;
       } else {
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(deepLinkParam);
-          return _completer.future;
-        }
-
         mapParams = {
           'method': DnaSignInRequest.METHOD_NAME,
           "params": [deepLinkParam.nonce != null ? deepLinkParam.nonce : ""],
           'id': 101,
-          'key': keyApp
+          'key': this.keyApp
         };
       }
 
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+      if (this.nodeType == NORMAL_VPS_NODE) {
         SSHClientStatus sshClientStatus;
-        sshClientStatus =
-            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
         if (sshClientStatus.sshClientStatus) {
           sshClient = sshClientStatus.sshClient;
         }
         var response = await ssh.HttpClientImpl(
             clientFactory: () =>
                 ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-            url.toString(),
+            this.apiUrl,
             method: 'POST',
             data: jsonEncode(mapParams),
             headers: requestHeaders);
@@ -1874,8 +1373,8 @@ class AppService {
       } else {
         dnaSignInRequest = DnaSignInRequest.fromJson(mapParams);
         String body = json.encode(dnaSignInRequest.toJson());
-        http.Response responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+            body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaSignInResponse = dnaSignInResponseFromJson(responseHttp.body);
           deepLinkParam.signature = dnaSignInResponse.result;
@@ -1932,35 +1431,26 @@ class AppService {
     try {
       BcnFeePerGasRequest bcnFeePerGasRequest;
       BcnFeePerGasResponse bcnFeePerGasResponse;
-      if (await NodeUtil().getNodeType() == DEMO_NODE) {
+      if (this.nodeType == DEMO_NODE) {
         feePerGas = DM_FEE_PER_GAS;
       } else {
-        Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-        String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(feePerGas);
-          return _completer.future;
-        }
-
         mapParams = {
           'method': BcnFeePerGasRequest.METHOD_NAME,
           'params': [],
           'id': 101,
-          'key': keyApp
+          'key': this.keyApp
         };
 
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        if (this.nodeType == NORMAL_VPS_NODE) {
           SSHClientStatus sshClientStatus;
-          sshClientStatus =
-              await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          sshClientStatus = await VpsUtil().connectVps(this.apiUrl, keyApp);
           if (sshClientStatus.sshClientStatus) {
             sshClient = sshClientStatus.sshClient;
           }
           var response = await ssh.HttpClientImpl(
               clientFactory: () =>
                   ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
-              url.toString(),
+              this.apiUrl,
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
@@ -1972,8 +1462,8 @@ class AppService {
         } else {
           bcnFeePerGasRequest = BcnFeePerGasRequest.fromJson(mapParams);
           String body = json.encode(bcnFeePerGasRequest.toJson());
-          http.Response responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
+          http.Response responseHttp = await http.post(Uri.parse(this.apiUrl),
+              body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             bcnFeePerGasResponse =
                 bcnFeePerGasResponseFromJson(responseHttp.body);

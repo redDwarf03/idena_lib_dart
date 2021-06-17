@@ -410,7 +410,7 @@ class SSHClient extends SSHTransport with SSHAgentForwarding {
       passwordPrompts = msg.prompts.length;
       getThenSendPassword();
     } else {
-      writeCipher(MSG_USERAUTH_INFO_RESPONSE(List<Uint8List>()));
+      writeCipher(MSG_USERAUTH_INFO_RESPONSE(List<Uint8List>.empty(growable: true)));
     }
   }
 

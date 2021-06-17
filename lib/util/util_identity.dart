@@ -1,8 +1,7 @@
 // @dart=2.9
 
 // Project imports:
-import 'package:idena_lib_dart/enums/identity_status.dart'
-    as IdentityStatus;
+import 'package:idena_lib_dart/enums/identity_status.dart' as IdentityStatus;
 import 'package:idena_lib_dart/model/dna_all.dart';
 import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
 

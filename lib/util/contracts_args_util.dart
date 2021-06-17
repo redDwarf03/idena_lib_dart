@@ -10,10 +10,11 @@ import 'package:decimal/decimal.dart';
 
 // Project imports:
 import 'package:idena_lib_dart/model/request/contract/contract_deploy_request.dart';
-import 'package:idena_lib_dart/pubdev/ethereum_util/utils.dart'
-    as ethereum_utils;
 import 'package:idena_lib_dart/util/crypto/bigint.dart' as bigint;
 import 'package:idena_lib_dart/util/crypto/utils_crypto.dart';
+
+import 'package:idena_lib_dart/pubdev/ethereum_util/utils.dart'
+    as ethereum_utils;
 
 const DNA_BASE = '1000000000000000000';
 

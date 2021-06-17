@@ -6,14 +6,10 @@
 // Dart imports:
 import 'dart:convert';
 
-// Flutter imports:
-import 'package:flutter/material.dart';
-
 // Project imports:
-import 'package:my_idena/appstate_container.dart';
 import 'package:idena_lib_dart/model/address.dart';
 import 'package:idena_lib_dart/model/smartContractMultiSig.dart';
-import 'package:my_idena/util/numberutil.dart';
+import 'package:idena_lib_dart/util/util_number.dart';
 
 BcnTransactionsResponse bcnTransactionsResponseFromJson(String str) =>
     BcnTransactionsResponse.fromJson(json.decode(str));
@@ -135,16 +131,16 @@ class Transaction {
     return NumberUtil.getRawAsUsableString(amount.toString());
   }
 
-  String getShortString(BuildContext context) {
-    if (this.from != StateContainer.of(context).selectedAccount.address) {
+  String getShortString(String selectedAccountAddress) {
+    if (this.from != selectedAccountAddress) {
       return new Address(this.from).getShorterString();
     } else {
       return new Address(this.to).getShorterString();
     }
   }
 
-  String getShorterString(BuildContext context) {
-    if (this.from != StateContainer.of(context).selectedAccount.address) {
+  String getShorterString(String selectedAccountAddress) {
+    if (this.from != selectedAccountAddress) {
       return new Address(this.from).getShorterString();
     } else {
       return new Address(this.to).getShorterString();
