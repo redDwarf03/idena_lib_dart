@@ -11,7 +11,7 @@ import 'package:asn1lib/asn1lib.dart';
 import 'package:pointycastle/api.dart' hide Signature;
 import 'package:pointycastle/asymmetric/api.dart' as asymmetric;
 import 'package:pointycastle/ecc/api.dart';
-import 'package:tweetnacl/tweetnacl.dart' as tweetnacl;
+import 'package:idena_lib_dart/pubdev/tweetnacl/tweetnacl_base.dart' as tweetnacl;
 
 // Project imports:
 import 'package:idena_lib_dart/pubdev/dartssh/identity.dart';

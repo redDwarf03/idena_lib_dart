@@ -14,17 +14,9 @@ dependencies:
   # Localization
   intl: ^0.17.0
   
-  tweetnacl:
-    git:
-      url: https://github.com/redDwarf03/tweetnacl-dart.git
-      ref: master
-
   sha3: ^0.2.0
 
-  web3dart:
-    git:
-      url: https://github.com/redDwarf03/web3dart.git
-      ref: master
+  web3dart: ^2.1.4
   
   # BigDecimal alternative
   decimal: ^1.1.0
@@ -32,12 +24,6 @@ dependencies:
   # Logger
   logger: ^1.0.0
   
-  # Deep link support
-  uni_links:
-    git:
-      url: https://github.com/redDwarf03/uni_links.git
-      ref: nfc_android
-
   # HTTP client
   http: ^0.13.3
   
@@ -48,11 +34,6 @@ dependencies:
 
   # Validation utilities
   validators: ^3.0.0
-
-  hash:  
-    git: 
-      url: https://github.com/redDwarf03/hash.git
-      ref: master
   
   protobuf: ^2.0.0
 
