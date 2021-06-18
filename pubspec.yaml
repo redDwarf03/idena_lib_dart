@@ -68,7 +68,4 @@ dev_dependencies:
   import_sorter: ^4.6.0
 
 flutter:
-  assets:  
-    - lib/util/words.json
-
   uses-material-design: true
