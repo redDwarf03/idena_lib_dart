@@ -11,7 +11,6 @@ import 'package:asn1lib/asn1lib.dart';
 import 'package:pointycastle/api.dart' hide Signature;
 import 'package:pointycastle/asymmetric/api.dart' as asymmetric;
 import 'package:pointycastle/ecc/api.dart';
-import 'package:idena_lib_dart/pubdev/tweetnacl/tweetnacl_base.dart' as tweetnacl;
 
 // Project imports:
 import 'package:idena_lib_dart/pubdev/dartssh/identity.dart';
@@ -19,6 +18,8 @@ import 'package:idena_lib_dart/pubdev/dartssh/protocol.dart';
 import 'package:idena_lib_dart/pubdev/dartssh/serializable.dart';
 import 'package:idena_lib_dart/pubdev/dartssh/ssh.dart';
 import 'package:idena_lib_dart/pubdev/dartssh/transport.dart';
+import 'package:idena_lib_dart/pubdev/tweetnacl/tweetnacl_base.dart'
+    as tweetnacl;
 
 /// Privacy-Enhanced Mail (PEM) is a de facto file format for storing and sending
 /// cryptographic keys, certificates, and other data.

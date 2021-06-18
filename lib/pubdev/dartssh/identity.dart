@@ -12,12 +12,13 @@ import 'package:pointycastle/digests/sha1.dart';
 import 'package:pointycastle/ecc/api.dart';
 import 'package:pointycastle/signers/ecdsa_signer.dart';
 import 'package:pointycastle/signers/rsa_signer.dart';
-import 'package:idena_lib_dart/pubdev/tweetnacl/tweetnacl_base.dart' as tweetnacl;
 
 // Project imports:
 import 'package:idena_lib_dart/pubdev/dartssh/protocol.dart';
 import 'package:idena_lib_dart/pubdev/dartssh/serializable.dart';
 import 'package:idena_lib_dart/pubdev/dartssh/ssh.dart';
+import 'package:idena_lib_dart/pubdev/tweetnacl/tweetnacl_base.dart'
+    as tweetnacl;
 
 class Identity {
   tweetnacl.KeyPair ed25519;

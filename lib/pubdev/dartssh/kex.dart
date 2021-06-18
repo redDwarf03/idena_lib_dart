@@ -7,7 +7,6 @@ import 'dart:math';
 import 'dart:typed_data';
 
 // Package imports:
-import 'package:idena_lib_dart/pubdev/tweetnacl/tweetnacl_base.dart';
 import "package:pointycastle/api.dart";
 import "package:pointycastle/digests/sha256.dart";
 import 'package:pointycastle/digests/sha1.dart';
@@ -17,6 +16,7 @@ import 'package:pointycastle/src/utils.dart';
 // Project imports:
 import 'package:idena_lib_dart/pubdev/dartssh/protocol.dart';
 import 'package:idena_lib_dart/pubdev/dartssh/ssh.dart';
+import 'package:idena_lib_dart/pubdev/tweetnacl/tweetnacl_base.dart';
 
 /// Mixin providing a suite of key exchange methods.
 mixin SSHDiffieHellman {
