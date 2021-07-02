@@ -16,16 +16,10 @@ dependencies:
 
   # Easy hexadecimal encoding and decoding
   hex: ^0.2.0
-
-  args: ^2.1.1
-
-  js: ^0.6.3
   
   crypto: ^3.0.1
 
-  fixnum: ^1.0.0
-  
-  collection: ^1.15.0
+  fixnum: ^1.0.0 
 
   meta: ^1.3.0
 
@@ -52,7 +46,7 @@ dependencies:
   protobuf: ^2.0.0
 
   asn1lib: ^1.0.2
-
+ 
   bip32: ^2.0.0
 
   bip39: ^1.0.6
