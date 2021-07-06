@@ -3,47 +3,38 @@
 //
 //     final dnaGetEpochResponse = dnaGetEpochResponseFromJson(jsonString);
 
-// Dart imports:
 import 'dart:convert';
 
-DnaGetEpochResponse dnaGetEpochResponseFromJson(String str) =>
-    DnaGetEpochResponse.fromJson(json.decode(str));
+DnaGetEpochResponse dnaGetEpochResponseFromJson(String str) => DnaGetEpochResponse.fromJson(json.decode(str));
 
-String dnaGetEpochResponseToJson(DnaGetEpochResponse data) =>
-    json.encode(data.toJson());
+String dnaGetEpochResponseToJson(DnaGetEpochResponse data) => json.encode(data.toJson());
 
 class DnaGetEpochResponse {
-  DnaGetEpochResponse({
-    this.jsonrpc,
-    this.id,
-    this.result,
-    this.error,
-  });
+    DnaGetEpochResponse({
+        this.jsonrpc,
+        this.id,
+        this.result,
+        this.error,
+    });
 
-  String jsonrpc;
-  int id;
-  DnaGetEpochResponseResult result;
-  DnaGetEpochResponseError error;
+    String jsonrpc;
+    int id;
+    DnaGetEpochResponseResult result;
+    DnaGetEpochResponseError error;
 
-  factory DnaGetEpochResponse.fromJson(Map<String, dynamic> json) =>
-      DnaGetEpochResponse(
+    factory DnaGetEpochResponse.fromJson(Map<String, dynamic> json) => DnaGetEpochResponse(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
-        error: json["error"] != null
-            ? DnaGetEpochResponseError.fromJson(json["error"])
-            : null,
-        result: json["result"] != null
-            ? DnaGetEpochResponseResult.fromJson(json["result"])
-            : null,
-      );
+        result: DnaGetEpochResponseResult.fromJson(json["result"]),
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "jsonrpc": jsonrpc,
         "id": id,
         "result": result.toJson(),
-        "error": error.toJson(),
-      };
+    };
 }
+
 
 class DnaGetEpochResponseError {
   DnaGetEpochResponseError({
@@ -67,30 +58,29 @@ class DnaGetEpochResponseError {
 }
 
 class DnaGetEpochResponseResult {
-  DnaGetEpochResponseResult({
-    this.epoch,
-    this.nextValidation,
-    this.currentPeriod,
-    this.currentValidationStart,
-  });
+    DnaGetEpochResponseResult({
+        this.startBlock,
+        this.epoch,
+        this.nextValidation,
+        this.currentPeriod,
+    });
 
-  int epoch;
-  DateTime nextValidation;
-  String currentPeriod;
-  DateTime currentValidationStart;
+    int startBlock;
+    int epoch;
+    DateTime nextValidation;
+    String currentPeriod;
 
-  factory DnaGetEpochResponseResult.fromJson(Map<String, dynamic> json) =>
-      DnaGetEpochResponseResult(
+    factory DnaGetEpochResponseResult.fromJson(Map<String, dynamic> json) => DnaGetEpochResponseResult(
+        startBlock: json["startBlock"],
         epoch: json["epoch"],
         nextValidation: DateTime.parse(json["nextValidation"]),
         currentPeriod: json["currentPeriod"],
-        currentValidationStart: DateTime.parse(json["currentValidationStart"]),
-      );
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
+        "startBlock": startBlock,
         "epoch": epoch,
         "nextValidation": nextValidation.toIso8601String(),
         "currentPeriod": currentPeriod,
-        "currentValidationStart": currentValidationStart.toIso8601String(),
-      };
+    };
 }
