@@ -5,6 +5,8 @@
 
 // Dart imports:
 import 'dart:typed_data' show Uint8List;
+import 'package:ecdsa/ecdsa.dart' as ecdsa;
+import 'package:elliptic/elliptic.dart' as elliptic;
 
 // Package imports:
 import 'package:convert/convert.dart' show hex;
@@ -102,20 +104,25 @@ class Transaction {
     k.update(this._createProtoTxData().writeToBuffer());
     Uint8List messageHash = Uint8List.fromList(k.digest());
 
+    var c = elliptic.getSecp256k1();
+    elliptic.PrivateKey priv = elliptic.PrivateKey.fromHex(c, privateKey);
+    ecdsa.Signature sig = ecdsa.signature(priv, messageHash);
+    this.signature = sig.toASN1();
+
     //print("messageHash: " + messageHash.toString());
     //print("messageHash: " + hex.encode(messageHash));
-    crypto.MsgSignature msgSignature =
-        crypto.sign(messageHash, crypto.hexToBytes(privateKey));
+   // crypto.MsgSignature msgSignature =
+   //     crypto.sign(messageHash, crypto.hexToBytes(privateKey));
 
     //print("signature: " + signature.toString());
-    final header = msgSignature.v & 0xFF;
+    /*final header = msgSignature.v & 0xFF;
     var recId = header - 27;
     this.signature = Uint8List.fromList(([
       ...AppHelpers.padUint8ListTo32(crypto.intToBytes(msgSignature.r)),
       ...AppHelpers.padUint8ListTo32(crypto.intToBytes(msgSignature.s)),
       recId
     ]));
-
+*/
     //print("signature: " + hex.encode(this.signature));
 
     return this;
