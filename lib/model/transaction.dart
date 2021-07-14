@@ -103,15 +103,30 @@ class Transaction {
     var k = SHA3(256, KECCAK_PADDING, 256);
     k.update(this._createProtoTxData().writeToBuffer());
     Uint8List messageHash = Uint8List.fromList(k.digest());
-    print(privateKey);
-    print(HEX.encode(messageHash));
+    print("pv: " + privateKey);
+    print("hash: " + HEX.encode(messageHash));
 
     elliptic.PrivateKey priv =
         elliptic.PrivateKey.fromHex(elliptic.getSecp256k1(), privateKey);
     var sig = ecdsa.ethereumSign(priv, messageHash);
+    print(sig.toEthCompactHex());
     this.signature = AppHelpers.hexToBytes(sig.toEthCompactHex());
 
+    crypto.MsgSignature msgSignature =
+        crypto.sign(messageHash, crypto.hexToBytes(privateKey));
+
+    final header = msgSignature.v & 0xFF;
+    var recId = header - 27;
+    Uint8List signature2 = Uint8List.fromList(([
+      ...AppHelpers.padUint8ListTo32(crypto.intToBytes(msgSignature.r)),
+      ...AppHelpers.padUint8ListTo32(crypto.intToBytes(msgSignature.s)),
+      recId
+    ]));
+    print("sig  : " + sig.toEthCompactHex().toUpperCase());
+    print("sig2 : " + AppHelpers.byteToHex(signature2));
+
     return this;
+
   }
 
   fromHex(var hex) {
