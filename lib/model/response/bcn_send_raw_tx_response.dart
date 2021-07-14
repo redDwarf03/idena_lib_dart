@@ -38,7 +38,7 @@ class BcnSendRawTxResponse {
   Map<String, dynamic> toJson() => {
         "jsonrpc": jsonrpc,
         "id": id,
-        "error": error.toJson(),
+        "error": error == null ? null : error.toJson(),
         "result": result,
       };
 }
