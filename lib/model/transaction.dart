@@ -107,13 +107,7 @@ class Transaction {
     elliptic.PrivateKey priv =
         elliptic.PrivateKey.fromHex(elliptic.getSecp256k1(), privateKey);
     var sig = ecdsa.ethereumSign(priv, messageHash);
-    final header = sig.getV() & 0xFF;
-    var recId = header - 27;
-    this.signature = Uint8List.fromList(([
-      ...AppHelpers.padUint8ListTo32(crypto.intToBytes(sig.R)),
-      ...AppHelpers.padUint8ListTo32(crypto.intToBytes(sig.S)),
-      recId
-    ]));
+    this.signature = AppHelpers.hexToBytes(sig.toEthCompactHex());
 
     return this;
   }
