@@ -117,11 +117,11 @@ class Transaction {
 
     final header = msgSignature.v & 0xFF;
     var recId = header - 27;
-    Uint8List signature2 = Uint8List.fromList(([
-      ...AppHelpers.padUint8ListTo32(crypto.intToBytes(msgSignature.r)),
-      ...AppHelpers.padUint8ListTo32(crypto.intToBytes(msgSignature.s)),
-      recId
-    ]));
+    Uint8List signature2 = AppHelpers.concat([
+      crypto.intToBytes(msgSignature.r),
+      crypto.intToBytes(msgSignature.s),
+      Uint8List.fromList([recId])]
+    );
     print("sig  : " + sig.toEthCompactHex().toUpperCase());
     print("sig2 : " + AppHelpers.byteToHex(signature2));
 
