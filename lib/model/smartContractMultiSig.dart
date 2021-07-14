@@ -1,5 +1,5 @@
 // Project imports:
-import 'package:idena_lib_dart/model/request/contract/api_contract_balance_updates_response.dart';
+import 'package:idena_lib_dart/model/response/contract/api_contract_balance_updates_response.dart';
 
 class SmartContractMultiSig {
   double? balance;

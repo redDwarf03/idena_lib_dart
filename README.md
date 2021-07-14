@@ -122,6 +122,109 @@ import 'package:idena_lib_dart/factory/app_service.dart';
 int feePerGas = AppService().getFeePerGas();
 ```
 
+### bcn_txReceipt
+```dart
+import 'package:idena_lib_dart/model/response/contract/bcn_tx_receipt_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+BcnTxReceiptResponse bcnTxReceiptResponse = SmartContractService().getTxReceipt(txHash);
+```
+
+### contract_deploy (TimeLock)
+```dart
+import 'package:idena_lib_dart/model/response/contract/contract_deploy_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractDeployResponse contractDeployResponse = SmartContractService().contractDeployTimeLock(nodeAddress, timestamp, amount, maxFee);
+```
+
+### contract_deploy (MultiSig)
+```dart
+import 'package:idena_lib_dart/model/response/contract/contract_deploy_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractDeployResponse contractDeployResponse = SmartContractService().contractDeployMultiSig(nodeAddress, maxVotes, minVotes, amount, maxFee);
+```
+
+### contract_estimateDeploy (TimeLock)
+```dart
+import 'package:idena_lib_dart/model/response/contract/contract_estimate_deploy_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractEstimateDeployResponse contractEstimateDeployResponse = SmartContractService().contractEstimateDeployTimeLock(nodeAddress, timestamp, amount);
+```
+
+### contract_estimateDeploy (MultiSig)
+```dart
+import 'package:idena_lib_dart/model/response/contract/contract_estimate_deploy_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractEstimateDeployResponse contractEstimateDeployResponse = SmartContractService().contractEstimateDeployMultiSig(nodeAddress, maxVotes, minVotes, amount);
+```
+
+### contract_call - method Transfer (TimeLock)
+```dart
+import 'package:idena_lib_dart/model/response/contract/contract_call_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractCallResponse contractCallResponse = SmartContractService().contractCallTransferTimeLock(nodeAddress, contract, maxFee, destinationAddress, amount);
+```
+
+### contract_call - method Send (MultiSig)
+```dart
+import 'package:idena_lib_dart/model/response/contract/contract_call_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractCallResponse contractCallResponse = SmartContractService().contractCallSendMultiSig(nodeAddress, contract, maxFee, destinationAddress, amount);
+```
+
+### contract_call - method Add (MultiSig)
+```dart
+import 'package:idena_lib_dart/model/response/contract/contract_call_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractCallResponse contractCallResponse = SmartContractService().contractCallAddMultiSig(nodeAddress, contract, maxFee, destinationAddress, privateKey);
+```
+
+### contract_call - method Push (MultiSig)
+```dart
+import 'package:idena_lib_dart/model/response/contract/contract_call_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractCallResponse contractCallResponse = SmartContractService().contractCallPushMultiSig(nodeAddress, contract, maxFee, destinationAddress, amount);
+```
+
+### contract_terminate (TimeLock)
+```dart
+import 'package:idena_lib_dart/model/response/contract/contract_terminate_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractTerminateResponse contractTerminateResponse = SmartContractService().contractTerminateTimeLock(nodeAddress, contract, maxFee, destinationAddress);
+```
+
+### contract_terminate (MultiSig)
+```dart
+import 'package:idena_lib_dart/model/response/contract/contract_terminate_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractTerminateResponse contractTerminateResponse = SmartContractService().contractTerminateMultiSig(nodeAddress, contract, maxFee, destinationAddress);
+```
+
+### contract_readData (uint64)
+```dart
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+int value = SmartContractService().getContractReadDataUint64(contractAddress, key);
+```
+
+### contract_readData (hex)
+```dart
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+String value = SmartContractService().getContractReadDataHex(contractAddress, key);
+```
+
+### contract_readData (byte)
+```dart
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+int byte = SmartContractService().getContractReadDataHex(contractAddress, key);
+```
+
+### contract_getStake
+```dart
+import 'package:idena_lib_dart/model/response/contract_get_stake_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ContractGetStakeResponse contractGetStakeResponse = SmartContractService().getContractStake(contractAddress);
+```
+
+
 ## others methods
 
 ### get Status
@@ -148,7 +251,30 @@ import 'package:idena_lib_dart/factory/app_service.dart';
 bool isIdenaAddress = AppService().checkAddressIdena(address);
 ```
 
+### get Predict Smart Contract Address
+```dart
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+String address = SmartContractService().getPredictSmartContractAddress(address);
+```
 
+### get Smart Contract
+```dart
+import 'package:idena_lib_dart/model/response/contract/api_contract_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ApiContractResponse apiContractResponse = SmartContractService().getContract(contractAddress);
+```
 
+### get Smart Contract Balance Updates
+```dart
+import 'package:idena_lib_dart/model/response/api_contract_balance_updates_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ApiContractBalanceUpdatesResponse apiContractBalanceUpdatesResponse = SmartContractService().getContractBalanceUpdates(address, contractAddress, limit);
+```
 
+### get Smart Contract Transactions
+```dart
+import 'package:idena_lib_dart/model/response/api_contract_txs_response.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+ApiContractTxsResponse apiContractTxsResponse = SmartContractService().getContractTxs(address, address, limit, typeOfContract);
+```
 

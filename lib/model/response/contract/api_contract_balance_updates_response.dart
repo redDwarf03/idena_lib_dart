@@ -1,5 +1,4 @@
 // @dart=2.9
-// @dart=2.9
 // To parse this JSON data, do
 //
 //     final apiContractBalanceUpdatesResponse = apiContractBalanceUpdatesResponseFromJson(jsonString);
