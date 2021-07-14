@@ -8,8 +8,6 @@ import 'dart:typed_data' show Uint8List;
 
 // Package imports:
 import 'package:convert/convert.dart' show hex;
-import 'package:ecdsa/ecdsa.dart' as ecdsa;
-import 'package:elliptic/elliptic.dart' as elliptic;
 import 'package:hex/hex.dart' show HEX;
 import 'package:sha3/sha3.dart';
 
@@ -92,7 +90,6 @@ class Transaction {
   }
 
   Transaction sign(String privateKey) {
-
     var k = SHA3(256, KECCAK_PADDING, 256);
     k.update(this._createProtoTxData().writeToBuffer());
     Uint8List messageHash = Uint8List.fromList(k.digest());

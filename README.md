@@ -8,31 +8,145 @@ Idena dart library for Flutter based on Official Idena Backoffice
 ```dart
 import 'package:idena_lib_dart/model/response/dna_getBalance_response.dart';
 import 'package:idena_lib_dart/factory/app_service.dart';
-DnaGetBalanceResponse dnaGetBalanceResponse = AppService>().getBalanceGetResponse(address);
+DnaGetBalanceResponse dnaGetBalanceResponse = AppService().getBalanceGetResponse(address);
 ```
 
 ### bcn_transactions
 ```dart
 import 'package:idena_lib_dart/model/response/bcn_transactions_response.dart';
 import 'package:idena_lib_dart/factory/app_service.dart';
-BcnTransactionsResponse bcnTransactionsResponse = AppService>().getAddressTxsResponse(address, count);
+BcnTransactionsResponse bcnTransactionsResponse = AppService().getAddressTxsResponse(address, count);
 ```
 
+### dna_getCoinbaseAddr
+```dart
+import 'package:idena_lib_dart/model/response/dna_getCoinbaseAddr_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse = AppService().getDnaGetCoinbaseAddr(addressByDefault);
+```
+
+### dna_identity
+```dart
+import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+DnaIdentityResponse dnaIdentityResponse = AppService().getDnaIdentity(address);
+```
+
+### dna_epoch
+```dart
+import 'package:idena_lib_dart/model/response/dna_getEpoch_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+DnaGetEpochResponse dnaGetEpochResponse = AppService().getDnaGetEpoch();
+```
+
+### dna_ceremonyIntervals
+```dart
+import 'package:idena_lib_dart/model/response/dna_ceremonyIntervals_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse = AppService().getDnaCeremonyIntervals();
+```
+
+### dna_becomeOnline
+```dart
+import 'package:idena_lib_dart/model/response/dna_becomeOnline_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+DnaBecomeOnlineResponse dnaBecomeOnlineResponse = AppService().becomeOnline();
+```
+
+### dna_becomeOffline
+```dart
+import 'package:idena_lib_dart/model/response/dna_becomeOffline_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+DnaBecomeOfflineResponse dnaBecomeOfflineResponse = AppService().becomeOffline();
+```
+
+### dna_sendTransaction
+```dart
+import 'package:idena_lib_dart/model/response/dna_sendTransaction_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+DnaSendTransactionResponse dnaSendTransactionResponse = AppService().sendTx(from, amount, to, privateKey, payload);
+```
+
+### bcn_syncing
+```dart
+import 'package:idena_lib_dart/model/response/bcn_syncing_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+BcnSyncingResponse bcnSyncingResponse = AppService().checkSync();
+```
+
+### bcn_mempool
+```dart
+import 'package:idena_lib_dart/model/response/bcn_mempool_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+BcnMempoolResponse bcnMempoolResponse = AppService().getMemPool(address);
+```
+
+### bcn_transaction
+```dart
+import 'package:idena_lib_dart/model/response/bcn_transaction_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+BcnTransactionResponse bcnTransactionResponse = AppService().getTransaction(hash, address);
+```
+
+### bcn_sendRawTx
+```dart
+import 'package:idena_lib_dart/model/response/bcn_send_raw_tx_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+BcnSendRawTxResponse bcnSendRawTxResponse = AppService().sendRawTx(hash, address);
+```
+
+### dna_activateInvite
+```dart
+import 'package:idena_lib_dart/model/response/dna_activate_invite_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+DnaActivateInviteResponse dnaActivateInviteResponse = AppService().activateInvitation(key, address);
+```
+
+### dna_sendInvite
+```dart
+import 'package:idena_lib_dart/model/response/dna_send_invite_response.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+DnaSendInviteResponse dnaSendInviteResponse = AppService().sendInvitation(address, amount, nonce, epoch);
+```
+
+### dna_sign
+```dart
+import 'package:idena_lib_dart/deepLinks/deepLinkParamSignin.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+DeepLinkParamSignin deepLinkParam = AppService().signin(deepLinkParam, privateKey);
+```
+
+### bcn_feePerGas
+```dart
+import 'package:idena_lib_dart/factory/app_service.dart';
+int feePerGas = AppService().getFeePerGas();
+```
 
 ## others methods
 
 ### get Status
 ```dart
 import 'package:idena_lib_dart/factory/app_service.dart';
-String status = AppService>().getWStatusGetResponse();
+String status = AppService().getWStatusGetResponse();
 ```
 
 ### get Last Nonce
 ```dart
 import 'package:idena_lib_dart/factory/app_service.dart';
-int nonce = AppService>().getLastNonce(address);
+int nonce = AppService().getLastNonce(address);
 ```
 
+### get Current Period
+```dart
+import 'package:idena_lib_dart/factory/app_service.dart';
+String currentPeriod = AppService().getCurrentPeriod();
+```
+
+### check Address
+```dart
+import 'package:idena_lib_dart/factory/app_service.dart';
+bool isIdenaAddress = AppService().checkAddressIdena(address);
+```
 
 
 
