@@ -111,7 +111,7 @@ class Transaction {
     var sig = ecdsa.ethereumSign(priv, messageHash);
     print(sig.toEthCompactHex());
 
-    this.signature = AppHelpers.hexToBytes(sig.toEthCompactHex());
+    //this.signature = AppHelpers.hexToBytes(sig.toEthCompactHex());
 
     crypto.MsgSignature msgSignature =
         crypto.sign(messageHash, crypto.hexToBytes(privateKey));
@@ -136,6 +136,7 @@ class Transaction {
     print("sig2 : " + AppHelpers.byteToHex(signature2));
     print("sig3 : " + AppHelpers.byteToHex(signature3));
 
+    this.signature = signature3;
     return this;
   }
 
