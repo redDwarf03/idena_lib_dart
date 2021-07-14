@@ -103,6 +103,8 @@ class Transaction {
     var k = SHA3(256, KECCAK_PADDING, 256);
     k.update(this._createProtoTxData().writeToBuffer());
     Uint8List messageHash = Uint8List.fromList(k.digest());
+    print(privateKey);
+    print(HEX.encode(messageHash));
 
     elliptic.PrivateKey priv =
         elliptic.PrivateKey.fromHex(elliptic.getSecp256k1(), privateKey);
