@@ -2,15 +2,12 @@ name: idena_lib_dart
 description: Idena dart library for Flutter based on Official Idena Backoffice
 homepage: https://github.com/redDwarf03/idena_lib_dart
 
-version: 0.0.1+1
+version: 0.0.1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-
   # Localization
   intl: ^0.17.0
 
@@ -27,7 +24,7 @@ dependencies:
 
   web3dart: ^2.1.4
   
-  ecdsa: ^0.0.2
+  ecdsa: ^0.0.4
 
   elliptic: ^0.3.1
   
