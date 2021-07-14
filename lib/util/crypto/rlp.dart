@@ -121,7 +121,7 @@ Decoded _decode(Uint8List input) {
     }
 
     Uint8List innerRemainder = input.sublist(llength, totalLength);
-    if (innerRemainder.isNotEmpty) {
+    if (innerRemainder.isEmpty) {
       throw FormatException('invalid rlp, List has a invalid length');
     }
 
