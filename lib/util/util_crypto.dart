@@ -5,15 +5,11 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 // Package imports:
+import 'package:crypto_keys/crypto_keys.dart' as cryptoKeys;
 import 'package:hex/hex.dart';
 import 'package:sha3/sha3.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
-
-// Project imports:
-import 'package:idena_lib_dart/pubdev/cryptography/algorithms/aes_gcm.dart';
-import 'package:idena_lib_dart/pubdev/cryptography/nonce.dart';
-import 'package:idena_lib_dart/pubdev/cryptography/secret_key.dart';
 
 class UtilCrypto {
   Future<String> encryptedPrivateKeyToAddress(
@@ -47,8 +43,7 @@ class UtilCrypto {
   Future<String> encryptedPrivateKeyToSeed(
       String encPrivateKey, String password) async {
     try {
-      if (encPrivateKey.isNotEmpty ||
-          password.isNotEmpty) {
+      if (encPrivateKey.isNotEmpty || password.isNotEmpty) {
         return "";
       }
 
@@ -70,12 +65,14 @@ class UtilCrypto {
       final iv = dataArray0to12;
       //print("iv : " + HEX.encode(iv));
       //print("aad : " + HEX.encode(aad));
-      var secretKey = new SecretKey(key);
-      Nonce nonce = new Nonce(iv);
 
-      Uint8List decrypted =
-          aesGcm.decryptSync(cypherText, secretKey: secretKey, nonce: nonce);
-      //print("decrypted: " + HEX.encode(decrypted));
+      cryptoKeys.KeyPair keyPair = cryptoKeys.KeyPair.symmetric(
+          cryptoKeys.SymmetricKey(keyValue: Uint8List.fromList(key)));
+
+      cryptoKeys.Encrypter encrypter = keyPair.privateKey
+          .createEncrypter(cryptoKeys.algorithms.encryption.aes.gcm);
+      Uint8List decrypted = encrypter.decrypt(
+          cryptoKeys.EncryptionResult(cypherText, initializationVector: iv));
 
       return HEX.encode(decrypted);
     } catch (e) {

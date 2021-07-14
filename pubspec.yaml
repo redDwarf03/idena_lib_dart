@@ -2,7 +2,7 @@ name: idena_lib_dart
 description: Idena dart library for Flutter based on Official Idena Backoffice
 homepage: https://github.com/redDwarf03/idena_lib_dart
 
-version: 0.0.1
+version: 0.0.2
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -22,6 +22,9 @@ dependencies:
 
   # Implementations of SHA, MD5, and HMAC cryptographic functions
   crypto: ^3.0.1
+
+  # A library for doing cryptographic signing/verifying and encrypting/decrypting.
+  crypto_keys: ^0.3.0
 
   # BigDecimal alternative
   decimal: ^1.1.0
