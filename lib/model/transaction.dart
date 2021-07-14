@@ -132,11 +132,20 @@ class Transaction {
       Uint8List.fromList([recId3])
     ]);
 
+    final header4 = sig.getV() & 0xFF;
+    var recId4 = header4 - 27;
+    Uint8List signature4 = Uint8List.fromList(([
+      ...AppHelpers.padUint8ListTo32(AppHelpers.bigIntToBytes(sig.R)),
+      ...AppHelpers.padUint8ListTo32(AppHelpers.bigIntToBytes(sig.S)),
+      recId4
+    ]));
+
     print("sig  : " + sig.toEthCompactHex().toUpperCase());
     print("sig2 : " + AppHelpers.byteToHex(signature2));
     print("sig3 : " + AppHelpers.byteToHex(signature3));
+    print("sig4 : " + AppHelpers.byteToHex(signature4));
 
-    this.signature = signature3;
+    this.signature = signature4;
     return this;
   }
 
