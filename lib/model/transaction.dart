@@ -145,7 +145,7 @@ class Transaction {
     print("sig3 : " + AppHelpers.byteToHex(signature3));
     print("sig4 : " + AppHelpers.byteToHex(signature4));
 
-    this.signature = signature4;
+    this.signature = signature2;
     return this;
   }
 
