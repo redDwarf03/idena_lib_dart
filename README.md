@@ -1,3 +1,5 @@
+[![Pub](https://img.shields.io/pub/v/idena_lib_dart.svg)](https://pub.dartlang.org/packages/idena_lib_dart) [![Platform](https://img.shields.io/badge/Platform-Flutter-02569B?logo=flutter)](https://flutter.dev) [![CodeFactor](https://www.codefactor.io/repository/github/reddwarf03/idena_lib_dart/badge)](https://www.codefactor.io/repository/github/reddwarf03/idena_lib_dart)
+
 # idena_lib_dart
 
 Idena dart library for Flutter based on Official Idena Backoffice
