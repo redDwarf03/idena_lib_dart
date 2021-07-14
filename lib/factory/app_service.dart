@@ -935,7 +935,9 @@ class AppService {
           //print("rawTxSigned : " + rawTxSigned);
           // Sign Raw Tx
 
-          await sendRawTx(rawTxSigned);
+          BcnSendRawTxResponse bcnSendRawTxResponse = await sendRawTx(rawTxSigned);
+          dnaSendTransactionResponse =
+                dnaSendTransactionResponseFromJson(bcnSendRawTxResponseToJson(bcnSendRawTxResponse));
         } else {
           dnaSendTransactionRequest =
               DnaSendTransactionRequest.fromJson(mapParams);
