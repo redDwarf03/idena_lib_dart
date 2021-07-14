@@ -43,7 +43,7 @@ class UtilCrypto {
   Future<String> encryptedPrivateKeyToSeed(
       String encPrivateKey, String password) async {
     try {
-      if (encPrivateKey.isNotEmpty || password.isNotEmpty) {
+      if (encPrivateKey.isEmpty || password.isEmpty) {
         return "";
       }
 
