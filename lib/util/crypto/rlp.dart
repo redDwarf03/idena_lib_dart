@@ -102,7 +102,7 @@ Decoded _decode(Uint8List input) {
     List<dynamic> decoded = <dynamic>[];
     int length = firstByte - 0xbf;
     Uint8List innerRemainder = input.sublist(1, length);
-    while (innerRemainder.length > 0) {
+    while (innerRemainder.isNotEmpty) {
       Decoded d = _decode(innerRemainder);
       decoded.add(d.data);
       innerRemainder = d.remainder;
@@ -121,11 +121,11 @@ Decoded _decode(Uint8List input) {
     }
 
     Uint8List innerRemainder = input.sublist(llength, totalLength);
-    if (innerRemainder.length == 0) {
+    if (innerRemainder.isNotEmpty) {
       throw FormatException('invalid rlp, List has a invalid length');
     }
 
-    while (innerRemainder.length > 0) {
+    while (innerRemainder.isNotEmpty) {
       Decoded d = _decode(innerRemainder);
       decoded.add(d.data);
       innerRemainder = d.remainder;

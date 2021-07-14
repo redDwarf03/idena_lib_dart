@@ -8,49 +8,63 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  # Localization
-  intl: ^0.17.0
-
-  # Easy hexadecimal encoding and decoding
-  hex: ^0.2.0
+  # An ASN1 parser library for Dart. Encodes / decodes from ASN1 Objects to BER bytes
+  asn1lib: ^1.0.2
   
+  # A BIP32 (https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) compatible library for Flutter writing by Dart.
+  bip32: ^2.0.0
+
+  # Dart implementation of Bitcoin BIP39 Mnemonic code for generating deterministic keys
+  bip39: ^1.0.6
+
+  # Utilities for converting between data representations. Provides a number of Sink, Codec, Decoder, and Encoder types.
+  convert: ^3.0.1
+
+  # Implementations of SHA, MD5, and HMAC cryptographic functions
   crypto: ^3.0.1
 
-  fixnum: ^1.0.0 
-
-  convert: ^3.0.0
-
-  sha3: ^0.2.0
-
-  web3dart: ^2.1.4
-  
-  ecdsa: ^0.0.4
-
-  elliptic: ^0.3.1
-  
   # BigDecimal alternative
   decimal: ^1.1.0
 
-  # Logger
-  logger: ^1.0.0
-  
+  # Package ecdsa implements the Elliptic Curve Digital Signature Algorithm, as defined in FIPS 186-3
+  ecdsa: ^0.0.4
+
+  # Basic elliptic curves
+  elliptic: ^0.3.1
+
+  # Library for 32- and 64-bit signed fixed-width integers with consistent behavior between native and JS runtimes
+  fixnum: ^1.0.0
+
+  # Flutter SDK
+  flutter:
+    sdk: flutter
+
+  # Easy hexadecimal encoding and decoding
+  hex: ^0.2.0
+
   # HTTP client
   http: ^0.13.3
   
-  pointycastle: ^3.1.1
-  
-  # Validation utilities
-  validators: ^3.0.0
-  
+  # Localization
+  intl: ^0.17.0
+
+  # Logger
+  logger: ^1.0.0
+
+  # A Dart library implementing cryptographic algorithms and primitives, modeled on the BouncyCastle library.
+  pointycastle: ^3.1.3
+
+  # Runtime library for protocol buffers support
   protobuf: ^2.0.0
 
-  asn1lib: ^1.0.2
- 
-  bip32: ^2.0.0
+  # SHA3 for dart
+  sha3: ^0.2.0
 
-  bip39: ^1.0.6
+  # Validation utilities
+  validators: ^3.0.0
+
+  # Dart library to connect to Ethereum clients. Send transactions and interact with smart contracts!
+  web3dart: ^2.1.4
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   import_sorter: ^4.6.0

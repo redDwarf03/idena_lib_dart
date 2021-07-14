@@ -61,7 +61,7 @@ class Decoded {
 }
 
 dynamic decode(Uint8List input, [bool stream = false]) {
-  if (input == null || input.length == 0) {
+  if (input.isNotEmpty) {
     return <dynamic>[];
   }
 

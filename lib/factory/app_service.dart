@@ -243,7 +243,7 @@ class AppService {
             bcnTransactionsResponse.result.transactions != null) {
           bcnTransactionsResponse.result.transactions = new List.from(
               bcnTransactionsResponse.result.transactions.reversed);
-          if (listTxsMempool != null && listTxsMempool.length > 0) {
+          if (listTxsMempool.isNotEmpty) {
             bcnTransactionsResponse.result.transactions.addAll(listTxsMempool);
           }
         }
